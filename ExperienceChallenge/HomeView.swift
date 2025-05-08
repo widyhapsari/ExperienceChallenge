@@ -7,14 +7,6 @@
 
 import SwiftUI
 
-extension LinearGradient {
-    static let appPrimaryGradient = LinearGradient(
-        colors: [Color(red: 1, green: 0.5, blue: 0.21), Color(red: 1, green: 0.33, blue: 0.33)],
-        startPoint: .top,
-        endPoint: .bottom
-    )
-}
-
 struct HomeView: View {
     @State private var searchText = ""
     
@@ -34,7 +26,7 @@ struct HomeView: View {
             VStack(spacing: 26) {
                 VStack(spacing: 0) {
                     Text("Where is your next stop?")
-                        .font(.title3)
+                        .scaledFont(size: 18, weight: .semibold)
                         .bold()
                     
                     
@@ -46,7 +38,7 @@ struct HomeView: View {
                                 .resizable()
                                 .scaledToFit()
                                 .frame(width: 22, height: 22)
-                                .foregroundColor(.ecBlue)
+                                .foregroundStyle(.ecBlue)
                                 .background(Circle().fill(Color.white))
                             
                             VStack(spacing: 2) {
@@ -87,7 +79,7 @@ struct HomeView: View {
                 //history
                 VStack(alignment: .leading, spacing: 15) {
                     Text("Recent bus stop")
-                        .font(.title3)
+                        .scaledFont(size: 18, weight: .semibold)
                         .bold()
                     
                     HStack(spacing: 12) {
@@ -101,7 +93,8 @@ struct HomeView: View {
                             
                             HStack(spacing: 12) {
                                 Text("B 7266 JF")
-                                    .font(.system(size: 14))
+                                    .scaledFont(size: 12, weight: .semibold)
+                                    .frame(maxWidth: .infinity, alignment: .center)
                                     .fontWeight(.semibold)
                                     .foregroundColor(Color.ecBusLightGreen)
                                     .padding(.horizontal, 10)
@@ -110,7 +103,8 @@ struct HomeView: View {
                                         .stroke(Color.ecBusLightGreen, lineWidth: 1))
                                 
                                 Text("B 7366 PAA")
-                                    .font(.system(size: 14))
+                                    .scaledFont(size: 12, weight: .semibold)
+                                    .frame(maxWidth: .infinity, alignment: .center)
                                     .fontWeight(.semibold)
                                     .foregroundColor(Color.ecBusPink)
                                     .padding(.horizontal, 10)
@@ -119,7 +113,8 @@ struct HomeView: View {
                                         .stroke(Color.ecBusPink, lineWidth: 1))
                                 
                                 Text("B 7466 PAA")
-                                    .font(.system(size: 14))
+                                    .scaledFont(size: 12, weight: .semibold)
+                                    .frame(maxWidth: .infinity, alignment: .center)
                                     .fontWeight(.semibold)
                                     .foregroundColor(Color.ecBusLightGreen)
                                     .padding(.horizontal, 10)
