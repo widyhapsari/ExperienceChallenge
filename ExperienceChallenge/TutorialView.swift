@@ -9,17 +9,17 @@ import SwiftUI
 
 struct TutorialView: View {
     var body: some View {
-        VStack(alignment: .center, spacing: 50) {
-            VStack(alignment: .center, spacing: 20) {
+        VStack(alignment: .center, spacing: 45) {
+            VStack(alignment: .center, spacing: 10) {
                 Text("How to Scan")
-                    .scaledFont(size: 20, weight: .semibold)
+                    .scaledFont(size: 18, weight: .semibold)
                     .multilineTextAlignment(.center)
                     .foregroundColor(.black)
                 
                 Text("BSD Link Plate Number")
-                    .scaledFont(size: 24, weight: .semibold)
+                    .scaledFont(size: 18, weight: .semibold)
                     .multilineTextAlignment(.center)
-                    .foregroundStyle(LinearGradient.appPrimaryGradient)
+                    .foregroundColor(.black)
             }
             
             //tutorial cards
@@ -32,7 +32,7 @@ struct TutorialView: View {
             Text("Continue")
                 .scaledFont(size: 16, weight: .semibold)
                 .frame(width: 108, height: 36, alignment: .center)
-                .background(LinearGradient.appPrimaryGradient)
+                .background(Color(.ecOrange))
                 .foregroundColor(.white)
                 .cornerRadius(10)
             
@@ -43,7 +43,7 @@ struct TutorialView: View {
         .frame(width: 393, height: 852, alignment: .top)
         .background(Color(red: 0.96, green: 0.96, blue: 0.96))
         
-        Spacer()
+        Spacer(minLength: 10)
             
     }
 }
@@ -63,9 +63,9 @@ struct ExtractedView: View {
                 .scaledFont(size: 15, weight: .semibold)
                 .frame(width: 40, height: 39, alignment: .leading)
             
-            VStack(alignment: .leading, spacing: 10) {
+            VStack(alignment: .leading, spacing: 5) {
                 Text(title)
-                    .font(.title3)
+                    .font(.body)
                     .fontWeight(.medium)
                     .fixedSize(horizontal: false, vertical: true)
                 
