@@ -109,45 +109,12 @@ struct SearchBar: View {
                             
                             VStack(alignment: .leading, spacing: 8) {
                                 Text("Studento")
-                                //                                .font(.headline)
-                                
-                                //                            HStack(spacing: 12) {
-                                //                                Text("B 7266 JF")
-                                //                                    .scaledFont(size: 12, weight: .semibold)
-                                //                                    .frame(maxWidth: .infinity, alignment: .center)
-                                //                                    .fontWeight(.semibold)
-                                //                                    .foregroundColor(Color.ecBusLightGreen)
-                                //                                    .padding(.horizontal, 10)
-                                //                                    .padding(.vertical, 7)
-                                //                                    .overlay(RoundedRectangle(cornerRadius: 8)
-                                //                                        .stroke(Color.ecBusLightGreen, lineWidth: 1))
-                                //                                
-                                //                                Text("B 7366 PAA")
-                                //                                    .scaledFont(size: 12, weight: .semibold)
-                                //                                    .frame(maxWidth: .infinity, alignment: .center)
-                                //                                    .fontWeight(.semibold)
-                                //                                    .foregroundColor(Color.ecBusPink)
-                                //                                    .padding(.horizontal, 10)
-                                //                                    .padding(.vertical, 7)
-                                //                                    .overlay(RoundedRectangle(cornerRadius: 8)
-                                //                                        .stroke(Color.ecBusPink, lineWidth: 1))
-                                //                                
-                                //                                Text("B 7466 PAA")
-                                //                                    .scaledFont(size: 12, weight: .semibold)
-                                //                                    .frame(maxWidth: .infinity, alignment: .center)
-                                //                                    .fontWeight(.semibold)
-                                //                                    .foregroundColor(Color.ecBusLightGreen)
-                                //                                    .padding(.horizontal, 10)
-                                //                                    .padding(.vertical, 7)
-                                //                                    .overlay(RoundedRectangle(cornerRadius: 8)
-                                //                                        .stroke(Color.ecBusLightGreen, lineWidth: 1))
-                                //                            }
-                                
                             }
                         }
-                        padding(.vertical, 12)
-                        Divider()
                     }
+                    .padding(.vertical, 12)
+                    Divider()
+                    
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
                 .padding(.horizontal, 15)
