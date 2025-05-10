@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct TutorialView: View {
+    @Environment(\.dismiss) var dismiss
+    
     var body: some View {
         VStack(alignment: .center, spacing: 45) {
             VStack(alignment: .center, spacing: 10) {
@@ -29,12 +31,13 @@ struct TutorialView: View {
                 ExtractedView(number: "3.", title: "Take a Snap", desc: "Press the snap button to get the route information")
             }
             
-            Text("Continue")
-                .scaledFont(size: 16, weight: .semibold)
-                .frame(width: 108, height: 36, alignment: .center)
-                .background(Color(.ecOrange))
-                .foregroundColor(.white)
-                .cornerRadius(10)
+            Button("Continue") {
+                dismiss()}
+                    .scaledFont(size: 16, weight: .semibold)
+                    .frame(width: 108, height: 36, alignment: .center)
+                    .background(Color(.ecOrange))
+                    .foregroundColor(.white)
+                    .cornerRadius(10)
             
             
         }

@@ -14,13 +14,13 @@ struct CameraView: View {
     @State private var showScanResult = false
     @State private var isShowingManualInput = false
     @State private var isCameraAuthorized = false
-    @State private var showTutorial = false
     @State private var capturedImage: CVPixelBuffer?
     @State private var isPlateDetected = false
     @State private var isProcessing = false
     @State private var detectedPlateText = ""
     @State private var scanFrameRect = CGRect(x: 0, y: 0, width: 250, height: 150)
     @State private var showRouteHistory = false
+    @Environment(\.presentationMode) var presentationMode
     
     var body: some View {
         ZStack {
@@ -36,23 +36,6 @@ struct CameraView: View {
             
             // Tutorial button
             VStack {
-                HStack {
-                    Spacer(minLength: 100)
-                    
-                    Button(action: {
-                        showTutorial = true
-                    }) {
-                        Image(systemName: "questionmark.circle.fill")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 28, height: 28)
-                            .foregroundStyle(.white)
-                            .background(Circle().fill(Color.black))
-                    }
-                    .padding(.trailing, 40)
-                }
-                Spacer()
-                
                 // Scanning frame with instructions
                 VStack(spacing: 25) {
                     
@@ -120,6 +103,29 @@ struct CameraView: View {
                 }
             }
         }
+        
+        .navigationBarBackButtonHidden(true)
+                .toolbar {
+                    ToolbarItem(placement: .topBarLeading) {
+                        HStack {
+                            Button {
+                                presentationMode.wrappedValue.dismiss()
+                            } label: {
+                                Image(systemName: "chevron.left")
+                                    .foregroundColor(.white)
+                                Text("Scan Bus Plate")
+                                    .foregroundColor(.white)
+                                    .font(.title3)
+                            }
+                            
+                            
+                            
+                            TutorialButton()
+                            
+                        }
+                        //.background(Color.red.opacity(0.3))
+                    }
+                }
     }
 }
 struct CamView: UIViewRepresentable {

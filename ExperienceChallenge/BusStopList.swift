@@ -10,12 +10,11 @@ import Foundation
 struct BusStop: Identifiable {
     let id = UUID()
     let name: String
-    let code: String
 }
 
 let allBusStops: [BusStop] = [
-    .init(name: "Studento", code: "01"),
-    .init(name: "Intermoda", code: "02"),
-    .init(name: "Foresta", code: "03"),
-    .init(name: "ICE", code: "04"),
+    .init(name: "Studento"),
+    .init(name: "Intermoda"),
+    .init(name: "Foresta"),
+    .init(name: "ICE"),
 ]
