@@ -8,6 +8,11 @@
 import SwiftUI
 import AVFoundation
 
+enum CameraViewSource {
+    case home
+    case scanner
+}
+
 struct CameraView: View {
     @State private var showRouteFinderView = false
     @State private var recognizedPlate: String?
@@ -19,8 +24,14 @@ struct CameraView: View {
     @State private var isProcessing = false
     @State private var detectedPlateText = ""
     @State private var scanFrameRect = CGRect(x: 0, y: 0, width: 250, height: 150)
-    @State private var showRouteHistory = false
+//    @State private var showRouteHistory = false
     @Environment(\.presentationMode) var presentationMode
+    let source: CameraViewSource
+    let stop: BusStop
+    @State private var searchText: String = ""
+    @FocusState private var isSearchFocused: Bool
+    @Environment(\.dismiss) var dismiss
+    
     
     var body: some View {
         ZStack {
@@ -36,9 +47,22 @@ struct CameraView: View {
             
             // Tutorial button
             VStack {
+                //showing search bar island
+                if source == .home {
+                    SearchBarIsland(
+                        searchText: $searchText,
+                        isFocused: $isSearchFocused,
+                        mode: .changeDestination,
+                        onTap: {
+                            dismiss() // Go back to HomeView
+                        }
+                    )
+                }
+                
+                Spacer()
+                
                 // Scanning frame with instructions
-                VStack(spacing: 25) {
-                    
+                VStack(spacing: 80) {
                     // Scanning frame - this will be positioned over the camera view
                     ZStack {
                         Rectangle()
@@ -102,6 +126,9 @@ struct CameraView: View {
                     .padding(.bottom, 80)
                 }
             }
+        }
+        .onAppear {
+            searchText = stop.name
         }
         
         .navigationBarBackButtonHidden(true)
@@ -324,5 +351,5 @@ struct CamView: UIViewRepresentable {
 }
 
 #Preview {
-    CameraView()
+    CameraView(source: .scanner, stop: defaultStop)
 }

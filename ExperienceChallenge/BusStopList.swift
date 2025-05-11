@@ -7,14 +7,23 @@
 
 import Foundation
 
-struct BusStop: Identifiable {
-    let id = UUID()
+struct BusStop: Identifiable, Equatable {
+    let id: UUID
     let name: String
+
+    init(id: UUID = UUID(), name: String) {
+        self.id = id
+        self.name = name
+    }
 }
 
+// Default list of bus stops
 let allBusStops: [BusStop] = [
-    .init(name: "Studento"),
-    .init(name: "Intermoda"),
-    .init(name: "Foresta"),
-    .init(name: "ICE"),
+    BusStop(name: "Studento"),
+    BusStop(name: "Intermoda"),
+    BusStop(name: "Foresta"),
+    BusStop(name: "ICE")
 ]
+
+// Optional: A default/fallback bus stop
+let defaultStop = BusStop(name: "Studento")

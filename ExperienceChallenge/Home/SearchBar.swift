@@ -9,6 +9,9 @@ import SwiftUI
 
 struct SearchBar: View {
     @State private var searchText = ""
+    @State private var selectedStop: BusStop? = nil
+    @State private var isNavigating = false
+
     @FocusState private var isSearchFocused: Bool
     
     var filteredStops: [BusStop] {
@@ -17,114 +20,81 @@ struct SearchBar: View {
         } else {
             return allBusStops.filter {
                 $0.name.localizedCaseInsensitiveContains(searchText)
-//                || $0.code.localizedCaseInsensitiveContains(searchText)
             }
         }
     }
     
     var body: some View {
-        VStack(spacing: 26) {
-            HStack(alignment: .top, spacing: 12) {
-                // Icon column
-                VStack(spacing: 6) {
-                    Image(systemName: "location.circle.fill")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 22, height: 22)
-                        .foregroundStyle(.ecBlue)
-                        .background(Circle().fill(Color.white))
-                    
-                    VStack(spacing: 2) {
-                        ForEach(0..<4) { _ in
-                            Rectangle()
-                                .fill(Color.black)
-                                .frame(width: 2, height: 2)
+        NavigationStack {
+            VStack(spacing: 26) {
+                //search bar island
+                SearchBarIsland(
+                                    searchText: $searchText,
+                                    isFocused: $isSearchFocused,
+                                    mode: .search
+                                )
+                
+                if isSearchFocused || !searchText.isEmpty {
+                    VStack(alignment: .leading) {
+                        ForEach(filteredStops) { stop in
+                            Button(action: {
+                                searchText = stop.name
+                                selectedStop = stop
+                                isSearchFocused = false
+                                isNavigating = true
+                            }) {
+                                HStack(spacing: 12) {
+                                    Image(systemName: "mappin.circle.fill")
+                                        .foregroundStyle(.secondary)
+                                        .background(Circle().fill(Color.white))
+                                    
+                                    Text(stop.name)
+                                        .foregroundColor(.primary)
+                                }
+                                .padding(.vertical, 12)
+                            }
+                            Divider()
                         }
                     }
-                    
-                    Image(systemName: "mappin.circle.fill")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 22, height: 22)
-                        .foregroundColor(.ecOrange)
-                        .background(Circle().fill(Color.white))
-                }
-                VStack(alignment: .leading, spacing: 14) {
-                    //current location
-                    Text("The Breeze")
-                    
-                    Divider()
-                    
-                    //destination
-                    VStack(alignment: .leading) {
-                        TextField("Next bus stop", text: $searchText)
-                            .focused($isSearchFocused)
+                    .padding(.horizontal, 20)
+                    .padding(.vertical, 15)
+                } else {
+                    VStack(alignment: .leading, spacing: 15) {
+                        Text("Recent bus stop")
+                            .scaledFont(size: 18, weight: .semibold)
+                            .bold()
                         
-                    }
-                }
-            }
-            .padding(12)
-            .background(Color(.secondarySystemBackground))
-            .cornerRadius(18)
-            .shadow(color: Color.black.opacity(0.08), radius: 1, x: 2, y: 2)
-            .padding(.horizontal)
-            .padding(.top, 16)
-            
-            // Display the suggestions
-            if isSearchFocused || !searchText.isEmpty {
-                VStack(alignment: .leading) {
-                    ForEach(filteredStops) { stop in
                         VStack(alignment: .leading, spacing: 6) {
                             HStack(spacing: 12) {
                                 Image(systemName: "clock.fill")
                                     .foregroundStyle(.secondary)
                                     .background(Circle().fill(Color.white))
-                                
-                                Text("\(stop.name)")
+                                VStack(alignment: .leading, spacing: 8) {
+                                    Text("Studento")
+                                }
                             }
-                            .padding(.vertical, 12)
-                            Divider()
-                            
                         }
+                        .padding(.vertical, 12)
+                        Divider()
                     }
+                    .padding(.horizontal, 15)
+                    .padding(.vertical, 15)
                 }
-                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-                .padding(.horizontal, 20)
-                .padding(.vertical, 15)
-                //.background(Color.red)
             }
+            .frame(maxHeight: .infinity, alignment: .top)
             
-            //history
-            else {
-                VStack(alignment: .leading, spacing: 15) {
-                    Text("Recent bus stop")
-                        .scaledFont(size: 18, weight: .semibold)
-                        .bold()
-                    
-                    VStack(alignment: .leading, spacing: 6) {
-                        HStack(spacing: 12) {
-                            Image(systemName: "clock.fill")
-                                .foregroundStyle(.secondary)
-                                .background(Circle().fill(Color.white))
-                            
-                            VStack(alignment: .leading, spacing: 8) {
-                                Text("Studento")
-                            }
-                        }
-                    }
-                    .padding(.vertical, 12)
-                    Divider()
-                    
+            // NavigationLink
+            .navigationDestination(isPresented: $isNavigating) {
+                if let stop = selectedStop {
+                    CameraView(source: .home, stop: stop)
                 }
-                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-                .padding(.horizontal, 15)
-                .padding(.vertical, 15)
             }
+
+            
         }
-        .frame(maxHeight: .infinity, alignment: .top)
-        //.background(Color.blue)
     }
 }
+
 
 #Preview {
     SearchBar()

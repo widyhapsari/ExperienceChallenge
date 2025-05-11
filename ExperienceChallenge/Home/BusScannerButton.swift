@@ -11,7 +11,7 @@ struct BusScannerButton: View {
     
     var body: some View {
         //bus scanner button
-        NavigationLink(destination: CameraView()) {
+        NavigationLink(destination: CameraView(source: .scanner, stop: defaultStop)) {
             ZStack {
                 Circle()
                     .fill(LinearGradient.appPrimaryGradient)
