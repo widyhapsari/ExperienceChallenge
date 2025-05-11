@@ -26,9 +26,9 @@ struct TutorialView: View {
             
             //tutorial cards
             VStack(spacing: 18) {
-                ExtractedView(number: "1.", title: "Allow Camera Use", desc: "We need camera permission \non your device")
-                ExtractedView(number: "2.", title: "Point at The Bus", desc: "Point your camera at the bus plate number")
-                ExtractedView(number: "3.", title: "Take a Snap", desc: "Press the snap button to get the route information")
+                TutorialViewCard(number: "1.", title: "Allow Camera Use", desc: "We need camera permission \non your device")
+                TutorialViewCard(number: "2.", title: "Point at The Bus", desc: "Point your camera at the bus plate number")
+                TutorialViewCard(number: "3.", title: "Take a Snap", desc: "Press the snap button to get the route information")
             }
             
             Button("Continue") {
@@ -55,7 +55,7 @@ struct TutorialView: View {
     TutorialView()
 }
 
-struct ExtractedView: View {
+struct TutorialViewCard: View {
     var number: String
     var title: String
     var desc: String
