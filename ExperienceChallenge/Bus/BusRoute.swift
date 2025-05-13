@@ -228,13 +228,13 @@ struct BusShelter: View {
         HStack {
             ZStack {
                 Rectangle()
-                    .fill(Color.ecTosca)
+                    .fill(Color.ecPurple)
                     .frame(width: 14)
                     .padding(.top, isFirst ? 40 : 0)
                     .padding(.bottom, isLast ? 40 : 0)
 
                 Circle()
-                    .strokeBorder(Color.ecTosca, lineWidth: CGFloat(circleSize))
+                    .strokeBorder(Color.ecPurple, lineWidth: CGFloat(circleSize))
                     .background(Circle().fill(Color.white.opacity(whiteCircleOpacity)))
                     .frame(width: 14, height: 14)
             }

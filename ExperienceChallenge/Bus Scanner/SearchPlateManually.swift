@@ -46,6 +46,7 @@ struct SearchPlateManually: View {
             .frame(width: 350)
             //.background(Color(.red))
         }
+        .padding(.top, 32)
         Spacer()
     }
 }

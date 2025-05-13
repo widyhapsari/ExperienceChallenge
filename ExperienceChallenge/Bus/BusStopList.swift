@@ -26,4 +26,4 @@ let allBusStops: [BusStop] = [
 ]
 
 // Optional: A default/fallback bus stop
-let defaultStop = BusStop(name: "Studento")
+let defaultStop = BusStop(name: "Intermoda")

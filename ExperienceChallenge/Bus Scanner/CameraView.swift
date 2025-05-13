@@ -45,7 +45,6 @@ struct CameraView: View {
                        manualCapture: false)
             .edgesIgnoringSafeArea(.all)
             
-            // Tutorial button
             VStack {
                 //showing search bar island
                 if source == .home {
@@ -60,71 +59,86 @@ struct CameraView: View {
                 }
                 
                 Spacer()
+                    
                 
                 // Scanning frame with instructions
-                VStack(spacing: 80) {
+                VStack(spacing: 96) {
                     // Scanning frame - this will be positioned over the camera view
-                    ZStack {
-                        Rectangle()
-                            .stroke(style: StrokeStyle(lineWidth: 3, dash: [10, 5]))
-                            .frame(width: 250, height: 150)
-                            .foregroundColor(isPlateDetected ? .green : .white)
-                            .background(Color.clear)
-                            .overlay(
-                                GeometryReader { geometry in
-                                    Color.clear
-                                        .onAppear {
-                                            // Store the frame's position for region of interest
-                                            let frame = geometry.frame(in: .global)
-                                            scanFrameRect = frame
-                                        }
-                                }
-                            )
-                        
-                        if isPlateDetected {
-                            Text(detectedPlateText)
-                                .font(.caption)
-                                .padding(4)
-                                .background(Color.black.opacity(0.6))
-                                .foregroundColor(.white)
-                                .cornerRadius(4)
-                                .position(x: 125, y: 130)
+                    VStack(spacing: 20) {
+                        ZStack {
+                            RoundedRectangle(cornerRadius: 8)
+                                .stroke(Color.ecOrange, lineWidth: 3)
+                                .frame(width: 300, height: 180)
+                                .foregroundColor(isPlateDetected ? .green : .white)
+                                .background(Color.clear)
+                                .overlay(
+                                    GeometryReader { geometry in
+                                        Color.clear
+                                            .onAppear {
+                                                // Store the frame's position for region of interest
+                                                let frame = geometry.frame(in: .global)
+                                                scanFrameRect = frame
+                                            }
+                                    }
+                                )
+                            
+                            if isPlateDetected {
+                                Text(detectedPlateText)
+                                    .font(.caption)
+                                    .padding(4)
+                                    .background(Color.black.opacity(0.6))
+                                    .foregroundColor(.white)
+                                    .cornerRadius(4)
+                                    .position(x: 125, y: 130)
+                            }
                         }
+                        .frame(width: 250, height: 150)
+                        //.padding(60)
+                        
+                        
+                        //scanning instruction
+                        Text("Place the bus plate number\ninside the box and snap")
+                            .font(.system(size: 15, weight: .medium))
+                            .multilineTextAlignment(.center)
+                            .foregroundColor(.gray)
+                            .padding(11)
+                            //.background(Color.gray.opacity(0.3))
+                            .cornerRadius(10)
                     }
-                    .frame(width: 250, height: 150)
-                    .padding(60)
                     
                     
                     
                     
-                    //scanning instruction
-                    Text("Place the bus plate number\ninside the box and snap")
-                        .font(.system(size: 15, weight: .medium))
-                        .multilineTextAlignment(.center)
-                        .foregroundColor(.white)
-                        .padding(11)
-                        .background(Color.gray.opacity(0.3))
-                        .cornerRadius(10)
-                    
-                    
+                    //snap button to scan the bus
+                    VStack(spacing: 20) {
+                        Text("Snap!")
+                            .scaledFont(size: 16, weight: .bold)
+                            .foregroundColor(.white)
+                            .frame(width: 280, height: 40)
+                            .background(Color(.ecOrange))
+                            .cornerRadius(12)
+                        
                         // input bus plate option
                         Button(action: {
                             isShowingManualInput = true
                         }) {
                             Text("Enter Bus Plate Manually")
-                                .font(.system(size: 18))
-                                .foregroundColor(Color("BlueColor"))
-                                .underline()
-                                //.frame(width: 330, height: 43)
-                                //.background(Color("BlueColor"))
-                                //.cornerRadius(7)
+                                .scaledFont(size: 16, weight: .bold)
+                                .foregroundStyle(LinearGradient.appPrimaryGradient)
+                                .frame(width: 280, height: 40)
+                                .overlay(RoundedRectangle(cornerRadius: 12)
+                                   .stroke(LinearGradient.appPrimaryGradient, lineWidth: 1))
                         }
+                    }
+                    
+                    
                     
                     //.padding(.vertical, 20)
                     //.padding(.horizontal, 15)
                     //.padding(.horizontal, 20)
-                    .padding(.bottom, 80)
+                    .padding(.bottom, 100)
                 }
+                //.padding(.top, 200)
             }
         }
         .onAppear {
@@ -152,6 +166,10 @@ struct CameraView: View {
                         }
                         //.background(Color.red.opacity(0.3))
                     }
+                }
+                .sheet(isPresented: $isShowingManualInput) {SearchPlateManually()
+                        .presentationDetents([.fraction(0.5)]) // Show only half-screen
+                        .presentationDragIndicator(.visible)   // Optional: show drag indicator
                 }
     }
 }

@@ -13,17 +13,17 @@ struct ResultView: View {
     var body: some View {
         VStack {
             // Plate number
-            Text("B 7366 JF")
+            Text("B 7866 PAA")
                 .scaledFont(size: 14)
                 .fontWeight(.semibold)
-                .foregroundColor(Color.ecTosca)
+                .foregroundColor(Color.ecPurple)
                 .padding(.horizontal, 12)
                 .padding(.vertical, 6)
                 .overlay(RoundedRectangle(cornerRadius: 8)
-                    .stroke(Color.ecTosca, lineWidth: 1))
+                    .stroke(Color.ecPurple, lineWidth: 1))
             
             // Jurusan bus
-            Text("Intermoda - De Park (Rute 1)")
+            Text("The Breeze - AEON - ICE - The Breeze")
                 .font(.title3)
                 .fontWeight(.medium)
             
