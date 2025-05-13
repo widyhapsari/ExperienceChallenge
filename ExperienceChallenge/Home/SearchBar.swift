@@ -28,7 +28,7 @@ struct SearchBar: View {
         NavigationStack {
             VStack(spacing: 26) {
                 //search bar island
-                SearchBarIsland(
+                SearchBarIsland (
                                     searchText: $searchText,
                                     isFocused: $isSearchFocused,
                                     mode: .search
