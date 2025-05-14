@@ -31,6 +31,8 @@ struct CameraView: View {
     @State private var searchText: String = ""
     @FocusState private var isSearchFocused: Bool
     @Environment(\.dismiss) var dismiss
+    @State private var showSearch = false
+    @State private var selectedPlate: BusInfo? = nil
     
     
     var body: some View {
@@ -119,16 +121,45 @@ struct CameraView: View {
                             .cornerRadius(12)
                         
                         // input bus plate option
-                        Button(action: {
-                            isShowingManualInput = true
-                        }) {
-                            Text("Enter Bus Plate Manually")
-                                .scaledFont(size: 16, weight: .bold)
-                                .foregroundStyle(LinearGradient.appPrimaryGradient)
-                                .frame(width: 280, height: 40)
-                                .overlay(RoundedRectangle(cornerRadius: 12)
-                                   .stroke(LinearGradient.appPrimaryGradient, lineWidth: 1))
+                        Button("Enter bus plate manually") {
+                            showSearch = true
                         }
+                        .scaledFont(size: 16, weight: .bold)
+                        .foregroundStyle(LinearGradient.appPrimaryGradient)
+                        .frame(width: 280, height: 40)
+                        .overlay(RoundedRectangle(cornerRadius: 12)
+                            .stroke(LinearGradient.appPrimaryGradient, lineWidth: 1))
+                        .sheet(isPresented: $showSearch) {
+                            NavigationStack {
+                                SearchPlateManually(
+                                    selectedPlate: $selectedPlate,
+                                    dismiss: { showSearch = false }
+                                )
+                            }
+                            .presentationDetents([.medium])
+                            .presentationDragIndicator(.visible)
+                        }
+
+                        // Invisible NavigationLink to trigger navigation on plate selection
+                        NavigationLink(
+                            destination: Group {
+                                // Always return *something* (even if plate is nil)
+                                if let plate = selectedPlate {
+                                    ResultView(plate: plate)
+                                } else {
+                                    EmptyView()
+                                }
+                            },
+                            isActive: Binding<Bool>(
+                                get: { selectedPlate != nil },
+                                set: { isActive in
+                                    if !isActive { selectedPlate = nil }
+                                }
+                            )
+                        ) {
+                            EmptyView()
+                        }
+
                     }
                     
                     
@@ -167,7 +198,8 @@ struct CameraView: View {
                         //.background(Color.red.opacity(0.3))
                     }
                 }
-                .sheet(isPresented: $isShowingManualInput) {SearchPlateManually()
+                .sheet(isPresented: $isShowingManualInput) {SearchPlateManually(selectedPlate: $selectedPlate,
+                        dismiss: { showSearch = false })
                         .presentationDetents([.fraction(0.5)]) // Show only half-screen
                         .presentationDragIndicator(.visible)   // Optional: show drag indicator
                 }

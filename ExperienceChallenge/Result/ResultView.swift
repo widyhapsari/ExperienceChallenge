@@ -9,6 +9,7 @@ import SwiftUI
 
 struct ResultView: View {
     @State private var hasScrolled = false
+    let plate: BusInfo
     
     var body: some View {
         VStack {
@@ -64,6 +65,8 @@ struct ResultView: View {
             )
         }
         .padding(.top, 8)
+        .navigationTitle("Bus Info")
+        .navigationBarTitleDisplayMode(.inline)
     }
 }
 
@@ -75,5 +78,5 @@ private struct ScrollOffsetKey: PreferenceKey {
 }
 
 #Preview {
-    ResultView()
+    ResultView(plate: BusInfo(plateNumber: "B 1234 XYZ", routeCode: "BC", routeName: "The Breeze - AEON - ICE - The Breeze Loop Line"))
 }

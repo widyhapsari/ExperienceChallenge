@@ -11,6 +11,8 @@ import SwiftUI
 struct SearchPlateManually: View {
     @State var searchPlate = ""
     @State private var selectedPlateNumber: BusInfo? = nil
+    @Binding var selectedPlate: BusInfo?
+    var dismiss: () -> Void
     let columns = [GridItem(.adaptive(minimum: 100))]
     
     var filteredPlates: [BusInfo] {
@@ -33,14 +35,20 @@ struct SearchPlateManually: View {
                 .frame(width: 350, height: 40)
                 .background(Color(.secondarySystemBackground))
                 .cornerRadius(12)
+            
             LazyVGrid(columns: columns, spacing: 16) {
                 ForEach(filteredPlates) { plate in
-                    Text(plate.plateNumber)
-                        .scaledFont(size: 12, weight: .semibold)
-                        .foregroundColor(Color.ecBusPink)
-                        .frame(width: 100, height: 28)
-                        .overlay(RoundedRectangle(cornerRadius: 8)
-                           .stroke(Color.ecBusPink, lineWidth: 1))
+                    Button {
+                        selectedPlate = plate
+                        dismiss()
+                    } label: {
+                        Text(plate.plateNumber)
+                            .scaledFont(size: 12, weight: .semibold)
+                            .foregroundColor(Color.ecBusPink)
+                            .frame(width: 100, height: 28)
+                            .overlay(RoundedRectangle(cornerRadius: 8)
+                                .stroke(Color.ecBusPink, lineWidth: 1))
+                    }
                 }
             }
             .frame(width: 350)
@@ -48,9 +56,22 @@ struct SearchPlateManually: View {
         }
         .padding(.top, 32)
         Spacer()
+        .navigationBarTitleDisplayMode(.inline)
     }
 }
 
 #Preview {
-    SearchPlateManually()
+    PreviewWrapper()
+}
+
+private struct PreviewWrapper: View {
+    @State var dummyPlate: BusInfo? = nil
+    @State var showSearch = false
+
+    var body: some View {
+        SearchPlateManually(
+            selectedPlate: $dummyPlate,
+            dismiss: { showSearch = false }
+        )
+    }
 }
