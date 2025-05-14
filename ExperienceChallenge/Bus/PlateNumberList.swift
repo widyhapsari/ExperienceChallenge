@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct BusInfo: Identifiable, Equatable {
+struct BusInfo: Identifiable, Hashable {
     let id: UUID
     let plateNumber: String
     let routeCode: String

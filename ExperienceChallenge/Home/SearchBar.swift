@@ -11,8 +11,29 @@ struct SearchBar: View {
     @State private var searchText = ""
     @State private var selectedStop: BusStop? = nil
     @State private var isNavigating = false
+    @State private var searchHistory: [String] = []
 
     @FocusState private var isSearchFocused: Bool
+    
+    // Load search history from UserDefaults when the view appears
+       private func loadSearchHistory() {
+           searchHistory = UserDefaults.standard.stringArray(forKey: "searchHistory") ?? []
+       }
+       
+       // Save search text to history
+       private func saveToHistory(_ text: String) {
+           if !text.isEmpty && !searchHistory.contains(text) {
+               searchHistory.insert(text, at: 0)
+               
+               // Limit history to 10 items
+               if searchHistory.count > 10 {
+                   searchHistory = Array(searchHistory.prefix(10))
+               }
+               
+               // Save to UserDefaults for persistence
+               UserDefaults.standard.set(searchHistory, forKey: "searchHistory")
+           }
+       }
     
     var filteredStops: [BusStop] {
         if searchText.isEmpty {
@@ -63,6 +84,58 @@ struct SearchBar: View {
                         Text("Recent bus stop")
                             .scaledFont(size: 18, weight: .semibold)
                             .bold()
+                        
+                        // Show search history
+//                        if !searchHistory.isEmpty {
+//                            VStack(alignment: .leading, spacing: 8) {
+//                                HStack {
+//                                    Text("Search History")
+//                                        .font(.headline)
+//                                }
+//                                .padding(.horizontal)
+//                                
+//                                ScrollView {
+//                                    LazyVStack(alignment: .leading) {
+//                                        ForEach(searchHistory, id: \.self) { item in
+//                                            Button(action: {
+//                                                searchText = item
+//                                                // Optionally perform search immediately
+//                                            }) {
+//                                                HStack {
+//                                                    Image(systemName: "clock.arrow.circlepath")
+//                                                        .foregroundColor(.gray)
+//                                                    
+//                                                    Text(item)
+//                                                    
+//                                                    Spacer()
+//                                                    
+//                                                    Button(action: {
+//                                                        if let index = searchHistory.firstIndex(of: item) {
+//                                                            searchHistory.remove(at: index)
+//                                                            UserDefaults.standard.set(searchHistory, forKey: "searchHistory")
+//                                                        }
+//                                                    }) {
+//                                                        Image(systemName: "xmark")
+//                                                            .foregroundColor(.gray)
+//                                                    }
+//                                                }
+//                                                .padding(.vertical, 8)
+//                                                .padding(.horizontal)
+//                                            }
+//                                            .buttonStyle(PlainButtonStyle())
+//                                            
+//                                            Divider()
+//                                                .padding(.leading)
+//                                        }
+//                                    }
+//                                }
+//                                .frame(maxHeight: 300)
+//                            }
+//                            .background(Color(.systemBackground))
+//                            .cornerRadius(12)
+//                            .shadow(radius: 2)
+//                            .padding()
+//                        }
                         
                         VStack(alignment: .leading, spacing: 6) {
                             HStack(spacing: 12) {

@@ -61,7 +61,7 @@ struct SearchPlateManually: View {
 }
 
 #Preview {
-    PreviewWrapper()
+//    PreviewWrapper()
 }
 
 private struct PreviewWrapper: View {

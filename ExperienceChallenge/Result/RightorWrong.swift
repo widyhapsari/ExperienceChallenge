@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct RightorWrong: View {
+    
     var body: some View {
         VStack(spacing: 16) {
             Image(systemName: "checkmark.seal.fill")

@@ -9,10 +9,20 @@ import SwiftUI
 
 struct ResultView: View {
     @State private var hasScrolled = false
-    let plate: BusInfo
+    @State private var isSearchBarActive: Bool = false
+    @Environment(\.dismiss) var dismiss
+    let source: CameraViewSource
+    let showResultCard: Bool
+    let busInfo: BusInfo
+    
     
     var body: some View {
         VStack {
+            if source == .home {
+                RightorWrong()
+                    .padding(24)
+            }
+            
             // Plate number
             Text("B 7866 PAA")
                 .scaledFont(size: 14)
@@ -63,9 +73,23 @@ struct ResultView: View {
                 .allowsHitTesting(false), // Ensures the overlay doesn't interfere with scrolling
                 alignment: .top
             )
+            .navigationBarBackButtonHidden(true)
+            .toolbar {
+                ToolbarItem(placement: .topBarLeading) {
+                    Button {
+                        dismiss()
+                    } label: {
+                        Image(systemName: "chevron.left")
+                            .foregroundColor(.blue)
+                        Text("Back")
+                            .foregroundColor(.blue)
+                            .font(.title3)
+                    }
+                }
+            }
         }
         .padding(.top, 8)
-        .navigationTitle("Bus Info")
+//        .navigationTitle("Bus Info")
         .navigationBarTitleDisplayMode(.inline)
     }
 }
@@ -78,5 +102,13 @@ private struct ScrollOffsetKey: PreferenceKey {
 }
 
 #Preview {
-    ResultView(plate: BusInfo(plateNumber: "B 1234 XYZ", routeCode: "BC", routeName: "The Breeze - AEON - ICE - The Breeze Loop Line"))
+    ResultView(
+            source: .home,
+            showResultCard: true,
+            busInfo: BusInfo(
+                plateNumber: "B 1234 XYZ",
+                routeCode: "BC",
+                routeName: "The Breeze - AEON - ICE - The Breeze Loop Line"
+            )
+        )
 }

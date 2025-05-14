@@ -36,173 +36,143 @@ struct CameraView: View {
     
     
     var body: some View {
-        ZStack {
-            // Camera view
-            CamView(recognizedPlate: $recognizedPlate,
-                       showScanResult: $showScanResult,
-                       capturedImage: $capturedImage,
-                       isPlateDetected: $isPlateDetected,
-                       detectedPlateText: $detectedPlateText,
-                       scanFrameRect: $scanFrameRect,
-                       manualCapture: false)
-            .edgesIgnoringSafeArea(.all)
-            
-            VStack {
-                //showing search bar island
-                if source == .home {
-                    SearchBarIsland(
-                        searchText: $searchText,
-                        isFocused: $isSearchFocused,
-                        mode: .changeDestination,
-                        onTap: {
-                            dismiss() // Go back to HomeView
+        NavigationStack {
+            ZStack {
+                // Camera view
+                CamView(recognizedPlate: $recognizedPlate,
+                        showScanResult: $showScanResult,
+                        capturedImage: $capturedImage,
+                        isPlateDetected: $isPlateDetected,
+                        detectedPlateText: $detectedPlateText,
+                        scanFrameRect: $scanFrameRect,
+                        manualCapture: false)
+                .edgesIgnoringSafeArea(.all)
+
+                VStack {
+                    // Search bar
+                    if source == .home {
+                        SearchBarIsland(
+                            searchText: $searchText,
+                            isFocused: $isSearchFocused,
+                            mode: .changeDestination,
+                            onTap: {
+                                dismiss()
+                            }
+                        )
+                    }
+
+                    Spacer()
+
+                    // Frame & Instructions
+                    VStack(spacing: 104) {
+                        VStack(spacing: 20) {
+                            ZStack {
+                                RoundedRectangle(cornerRadius: 8)
+                                    .stroke(Color.ecOrange, lineWidth: 3)
+                                    .frame(width: 300, height: 180)
+                                    .foregroundColor(isPlateDetected ? .green : .white)
+                                    .background(Color.clear)
+                                    .overlay(
+                                        GeometryReader { geometry in
+                                            Color.clear
+                                                .onAppear {
+                                                    scanFrameRect = geometry.frame(in: .global)
+                                                }
+                                        }
+                                    )
+
+                                if isPlateDetected {
+                                    Text(detectedPlateText)
+                                        .font(.caption)
+                                        .padding(4)
+                                        .background(Color.black.opacity(0.6))
+                                        .foregroundColor(.white)
+                                        .cornerRadius(4)
+                                        .position(x: 125, y: 130)
+                                }
+                            }
+                            .frame(width: 250, height: 150)
+
+                            Text("Place the bus plate number\ninside the box and snap")
+                                .font(.system(size: 15, weight: .medium))
+                                .multilineTextAlignment(.center)
+                                .foregroundColor(.gray)
+                                .padding(11)
                         }
-                    )
-                }
-                
-                Spacer()
-                    
-                
-                // Scanning frame with instructions
-                VStack(spacing: 96) {
-                    // Scanning frame - this will be positioned over the camera view
-                    VStack(spacing: 20) {
-                        ZStack {
-                            RoundedRectangle(cornerRadius: 8)
-                                .stroke(Color.ecOrange, lineWidth: 3)
-                                .frame(width: 300, height: 180)
-                                .foregroundColor(isPlateDetected ? .green : .white)
-                                .background(Color.clear)
-                                .overlay(
-                                    GeometryReader { geometry in
-                                        Color.clear
-                                            .onAppear {
-                                                // Store the frame's position for region of interest
-                                                let frame = geometry.frame(in: .global)
-                                                scanFrameRect = frame
-                                            }
-                                    }
-                                )
-                            
-                            if isPlateDetected {
-                                Text(detectedPlateText)
-                                    .font(.caption)
-                                    .padding(4)
-                                    .background(Color.black.opacity(0.6))
+
+                        // Snap + Manual Button
+                        VStack(spacing: 12) {
+                            NavigationLink(destination: ResultView(source: source, showResultCard: source == .home, busInfo: BusInfo(
+                                plateNumber: "B 1234 XYZ",
+                                routeCode: "BC",
+                                routeName: "The Breeze - AEON - ICE - The Breeze Loop Line"
+                            ))) {
+                                Text("Snap!")
+                                    .scaledFont(size: 16, weight: .bold)
                                     .foregroundColor(.white)
-                                    .cornerRadius(4)
-                                    .position(x: 125, y: 130)
+                                    .frame(width: 280, height: 40)
+                                    .background(Color(.ecOrange))
+                                    .cornerRadius(12)
                             }
-                        }
-                        .frame(width: 250, height: 150)
-                        //.padding(60)
-                        
-                        
-                        //scanning instruction
-                        Text("Place the bus plate number\ninside the box and snap")
-                            .font(.system(size: 15, weight: .medium))
-                            .multilineTextAlignment(.center)
-                            .foregroundColor(.gray)
-                            .padding(11)
-                            //.background(Color.gray.opacity(0.3))
-                            .cornerRadius(10)
-                    }
-                    
-                    
-                    
-                    
-                    //snap button to scan the bus
-                    VStack(spacing: 20) {
-                        Text("Snap!")
+                                
+
+                            Button("Enter bus plate manually") {
+                                showSearch = true
+                            }
                             .scaledFont(size: 16, weight: .bold)
-                            .foregroundColor(.white)
+                            .foregroundStyle(LinearGradient.appPrimaryGradient)
                             .frame(width: 280, height: 40)
-                            .background(Color(.ecOrange))
-                            .cornerRadius(12)
-                        
-                        // input bus plate option
-                        Button("Enter bus plate manually") {
-                            showSearch = true
-                        }
-                        .scaledFont(size: 16, weight: .bold)
-                        .foregroundStyle(LinearGradient.appPrimaryGradient)
-                        .frame(width: 280, height: 40)
-                        .overlay(RoundedRectangle(cornerRadius: 12)
-                            .stroke(LinearGradient.appPrimaryGradient, lineWidth: 1))
-                        .sheet(isPresented: $showSearch) {
-                            NavigationStack {
-                                SearchPlateManually(
-                                    selectedPlate: $selectedPlate,
-                                    dismiss: { showSearch = false }
-                                )
+                            .overlay(RoundedRectangle(cornerRadius: 12)
+                                .stroke(LinearGradient.appPrimaryGradient, lineWidth: 1))
+                            .sheet(isPresented: $showSearch) {
+                                NavigationStack {
+                                    SearchPlateManually(
+                                        selectedPlate: $selectedPlate,
+                                        dismiss: { showSearch = false }
+                                    )
+                                }
+                                .presentationDetents([.medium])
+                                .presentationDragIndicator(.visible)
                             }
-                            .presentationDetents([.medium])
-                            .presentationDragIndicator(.visible)
                         }
-
-                        // Invisible NavigationLink to trigger navigation on plate selection
-                        NavigationLink(
-                            destination: Group {
-                                // Always return *something* (even if plate is nil)
-                                if let plate = selectedPlate {
-                                    ResultView(plate: plate)
-                                } else {
-                                    EmptyView()
-                                }
-                            },
-                            isActive: Binding<Bool>(
-                                get: { selectedPlate != nil },
-                                set: { isActive in
-                                    if !isActive { selectedPlate = nil }
-                                }
-                            )
-                        ) {
-                            EmptyView()
-                        }
-
+                        .padding(.bottom, 100)
                     }
-                    
-                    
-                    
-                    //.padding(.vertical, 20)
-                    //.padding(.horizontal, 15)
-                    //.padding(.horizontal, 20)
-                    .padding(.bottom, 100)
                 }
-                //.padding(.top, 200)
+            }
+            .onAppear {
+                searchText = stop.name
+            }
+            .navigationBarBackButtonHidden(true)
+            .toolbar {
+                ToolbarItem(placement: .topBarLeading) {
+                    HStack {
+                        Button {
+                            presentationMode.wrappedValue.dismiss()
+                        } label: {
+                            Image(systemName: "chevron.left")
+                                .foregroundColor(.white)
+                            Text("Scan Bus Plate")
+                                .foregroundColor(.white)
+                                .font(.title3)
+                        }
+                        TutorialButton()
+                    }
+                }
+            }
+            // Invisible navigation trigger
+            if let plate = selectedPlate {
+                NavigationLink(value: plate) {
+                    EmptyView()
+                }
             }
         }
-        .onAppear {
-            searchText = stop.name
+        .navigationDestination(item: $selectedPlate) { plate in
+            ResultView(
+                source: source,
+                showResultCard: source == .home,
+                busInfo: plate
+            )
         }
-        
-        .navigationBarBackButtonHidden(true)
-                .toolbar {
-                    ToolbarItem(placement: .topBarLeading) {
-                        HStack {
-                            Button {
-                                presentationMode.wrappedValue.dismiss()
-                            } label: {
-                                Image(systemName: "chevron.left")
-                                    .foregroundColor(.white)
-                                Text("Scan Bus Plate")
-                                    .foregroundColor(.white)
-                                    .font(.title3)
-                            }
-                            
-                            
-                            
-                            TutorialButton()
-                            
-                        }
-                        //.background(Color.red.opacity(0.3))
-                    }
-                }
-                .sheet(isPresented: $isShowingManualInput) {SearchPlateManually(selectedPlate: $selectedPlate,
-                        dismiss: { showSearch = false })
-                        .presentationDetents([.fraction(0.5)]) // Show only half-screen
-                        .presentationDragIndicator(.visible)   // Optional: show drag indicator
-                }
     }
 }
 struct CamView: UIViewRepresentable {
