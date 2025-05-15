@@ -19,8 +19,8 @@ struct TutorialButton: View {
                     .resizable()
                     .scaledToFit()
                     .frame(width: 24, height: 24)
-                    .foregroundStyle(.white)
-                    .background(Circle().fill(Color.black))
+                    .foregroundStyle(.gray)
+                    .background(Circle().fill(Color.white))
             }
             .padding(.leading, 156)
             //.background(Color.red)

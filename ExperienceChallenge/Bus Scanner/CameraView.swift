@@ -39,14 +39,14 @@ struct CameraView: View {
         NavigationStack {
             ZStack {
                 // Camera view
-                CamView(recognizedPlate: $recognizedPlate,
-                        showScanResult: $showScanResult,
-                        capturedImage: $capturedImage,
-                        isPlateDetected: $isPlateDetected,
-                        detectedPlateText: $detectedPlateText,
-                        scanFrameRect: $scanFrameRect,
-                        manualCapture: false)
-                .edgesIgnoringSafeArea(.all)
+//                CamView(recognizedPlate: $recognizedPlate,
+//                        showScanResult: $showScanResult,
+//                        capturedImage: $capturedImage,
+//                        isPlateDetected: $isPlateDetected,
+//                        detectedPlateText: $detectedPlateText,
+//                        scanFrameRect: $scanFrameRect,
+//                        manualCapture: false)
+//                .edgesIgnoringSafeArea(.all)
 
                 VStack {
                     // Search bar
@@ -150,9 +150,9 @@ struct CameraView: View {
                             presentationMode.wrappedValue.dismiss()
                         } label: {
                             Image(systemName: "chevron.left")
-                                .foregroundColor(.white)
+                                .foregroundColor(.ecLightDark)
                             Text("Scan Bus Plate")
-                                .foregroundColor(.white)
+                                .foregroundColor(.ecLightDark)
                                 .font(.title3)
                         }
                         TutorialButton()
