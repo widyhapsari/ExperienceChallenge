@@ -160,8 +160,30 @@ struct CameraScanner: UIViewRepresentable {
             // Convert UI coordinates to normalized coordinates for Vision
             let normalizedRect = convertToNormalizedRect(scanFrameRect, pixelBuffer: pixelBuffer)
             
-            let request = VNRecognizeTextRequest { [weak self] request, error in
-                guard let self = self, error == nil else { return }
+            // Safely expand region without going out of bounds
+                let padding: CGFloat = 0.02
+            
+                let x = max(0, normalizedRect.origin.x - padding)
+                let y = max(0, normalizedRect.origin.y - padding)
+                var width = normalizedRect.width + (padding * 2)
+                var height = normalizedRect.height + (padding * 2)
+            
+                if x + width > 1.0 {
+                    width = 1.0 - x
+                }
+                if y + height > 1.0 {
+                    height = 1.0 - y
+                }
+
+                let expandedRect = CGRect(x: x, y: y, width: width, height: height)
+
+                // Create the text recognition request
+                let request = VNRecognizeTextRequest { [weak self] request, error in
+                    guard let self = self, error == nil else {
+                        print("Failed to perform text recognition: \(error?.localizedDescription ?? "Unknown error")")
+                        return
+                    }
+
                 
                 if let results = request.results as? [VNRecognizedTextObservation] {
                     // Process text observations
@@ -308,15 +330,20 @@ struct CameraScanner: UIViewRepresentable {
             request.recognitionLevel = .accurate
             request.usesLanguageCorrection = false
             request.revision = 3
-            
-            // Use a slightly larger region of interest to catch more text
-            let expandedRect = CGRect(
-                x: max(0, normalizedRect.origin.x - 0.05),
-                y: max(0, normalizedRect.origin.y - 0.05),
-                width: min(1.0, normalizedRect.width + 0.1),
-                height: min(1.0, normalizedRect.height + 0.1)
-            )
             request.regionOfInterest = expandedRect
+            
+            
+            
+//            // Use a slightly larger region of interest to catch more text
+//            let expandedRect = CGRect(
+//                x: max(0, normalizedRect.origin.x - 0.05),
+//                y: max(0, normalizedRect.origin.y - 0.05),
+//                width: min(1.0, normalizedRect.width + 0.1),
+//                height: min(1.0, normalizedRect.height + 0.1)
+//            )
+//            request.regionOfInterest = expandedRect
+            
+            
             
             // Create a handler to perform the request
             let handler = VNImageRequestHandler(cvPixelBuffer: pixelBuffer, options: [:])
