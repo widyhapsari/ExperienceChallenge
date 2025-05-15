@@ -22,7 +22,9 @@ let allBusStops: [BusStop] = [
     BusStop(name: "Studento"),
     BusStop(name: "Intermoda"),
     BusStop(name: "Foresta"),
-    BusStop(name: "ICE")
+    BusStop(name: "ICE"),
+    BusStop(name: "Naturale"),
+    BusStop(name: "The Breeze")
 ]
 
 // Optional: A default/fallback bus stop

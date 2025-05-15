@@ -47,7 +47,9 @@ struct SearchBarIsland: View {
             
             VStack(alignment: .leading, spacing: 14) {
                 Text("The Breeze")
+                
                 Divider()
+                
                 VStack(alignment: .leading) {
                     TextField("Your destination", text: $searchText)
                         .focused($isFocused)

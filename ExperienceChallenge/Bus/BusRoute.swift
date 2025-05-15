@@ -38,20 +38,20 @@ let TheBreeze_ICE: [ShelterData] = [
     .init(shelter: "The Breeze", interval: 0),
     .init(shelter: "CBD Timur 1", interval: 3),
     .init(shelter: "Lobby AEON Mall", interval: 8),
-    .init(shelter: "AEON Mall 2", interval:11),
-    .init(shelter: "CBD Utara 3", interval:13),
-    .init(shelter: "ICE 1", interval:16),
-    .init(shelter: "ICE 2", interval:18),
-    .init(shelter: "ICE Business Park", interval:20),
-    .init(shelter: "ICE 6", interval:21),
-    .init(shelter: "ICE 5", interval:22),
-    .init(shelter: "CBD Barat 1", interval:25),
-    .init(shelter: "CBD Barat 2", interval:26),
-    .init(shelter: "Lobby AEON Mall", interval:29),
-    .init(shelter: "AEON Mall 2", interval:32),
-    .init(shelter: "GOP 2", interval:35),
-    .init(shelter: "Nava Park 1", interval:37),
-    .init(shelter: "Green Cove", interval:39)
+    .init(shelter: "AEON Mall 2", interval: 11),
+    .init(shelter: "CBD Utara 3", interval: 13),
+    .init(shelter: "ICE 1", interval: 16),
+    .init(shelter: "ICE 2", interval: 18),
+    .init(shelter: "ICE Business Park", interval: 20),
+    .init(shelter: "ICE 6", interval: 21),
+    .init(shelter: "ICE 5", interval: 22),
+    .init(shelter: "CBD Barat 1", interval: 25),
+    .init(shelter: "CBD Barat 2", interval: 26),
+    .init(shelter: "Lobby AEON Mall", interval: 29),
+    .init(shelter: "AEON Mall 2", interval: 32),
+    .init(shelter: "GOP 2", interval: 35),
+    .init(shelter: "Nava Park 1", interval: 37),
+    .init(shelter: "Green Cove", interval: 39)
 ]
 
 let GreenwichPark_Sektor13: [ShelterData] = [
@@ -266,10 +266,17 @@ struct BusRoute: View {
     let timeHour = 11
     let timeMinute = 0
     let stops: [ShelterData]
+    let breezeIndex: Int?
+    let highlightDestinationIndex: Int?
 
     var body: some View {
         VStack(spacing: -20) {
             ForEach(Array(stops.enumerated()), id: \.offset) { index, stop in
+                // Determine if this stop should be highlighted
+                let isBreeze = index == breezeIndex
+                let isHighlightedDestination = index == highlightDestinationIndex
+                let shouldHighlight = isBreeze || isHighlightedDestination
+
                 BusShelter(
                     shelter: stop.shelter,
                     timeHour: timeHour,
@@ -278,7 +285,8 @@ struct BusRoute: View {
                     isFirst: index == 0,
                     isLast: index == stops.count - 1,
                     circleSize: (index == 0 || index == stops.count - 1) ? 3 : 4,
-                    whiteCircleOpacity: (index == 0 || index == stops.count - 1) ? 1 : 0.6
+                    whiteCircleOpacity: (index == 0 || index == stops.count - 1) ? 1 : 0.6,
+                    isHighlighted: shouldHighlight
                 )
             }
         }
@@ -289,7 +297,11 @@ struct BusRoute: View {
 
 
 #Preview {
-    BusRoute(stops: TheBreeze_ICE)
+    BusRoute(
+        stops: TheBreeze_ICE,
+        breezeIndex: TheBreeze_ICE.firstIndex { $0.shelter.contains("The Breeze") },
+        highlightDestinationIndex: 5  // Example index for preview
+    )
 }
 
 struct BusShelter: View {
@@ -301,6 +313,7 @@ struct BusShelter: View {
     var isLast: Bool
     var circleSize: Int
     var whiteCircleOpacity: Double
+    var isHighlighted: Bool = false
 
     private var totalMinutes: Int {
         timeMinute + interval
@@ -330,6 +343,8 @@ struct BusShelter: View {
             
             Text(shelter)
                 .font(.callout)
+                .foregroundColor(isHighlighted ? .blue : .primary)
+                .fontWeight(isHighlighted ? .bold : .regular)
 
             Spacer()
 

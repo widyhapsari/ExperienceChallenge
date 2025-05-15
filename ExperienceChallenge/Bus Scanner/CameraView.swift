@@ -108,7 +108,7 @@ struct CameraView: View {
                                 plateNumber: "B 1234 XYZ",
                                 routeCode: "BC",
                                 routeName: "The Breeze - AEON - ICE - The Breeze Loop Line"
-                            ))) {
+                            ), searchText: "Studento")) {
                                 Text("Snap!")
                                     .scaledFont(size: 16, weight: .bold)
                                     .foregroundColor(.white)
@@ -172,7 +172,8 @@ struct CameraView: View {
             ResultView(
                 source: source,
                 showResultCard: source == .home,
-                busInfo: plate
+                busInfo: plate,
+                searchText: searchText
             )
         }
         .alert(isPresented: .constant(!isCameraAuthorized && AVCaptureDevice.authorizationStatus(for: .video) == .denied)) {

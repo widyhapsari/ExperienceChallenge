@@ -14,10 +14,27 @@ struct ResultView: View {
     let source: CameraViewSource
     let showResultCard: Bool
     let busInfo: BusInfo
+    let searchText: String
     
     
     var body: some View {
         let routeStops = shelterData(for: busInfo.routeCode)
+        
+        // Find The Breeze index
+        let breezeIndex = routeStops.firstIndex {
+            $0.shelter.localizedCaseInsensitiveContains("The Breeze")
+        }
+        
+        // Find the earliest search text match that appears after The Breeze
+        let earliestDestinationIndex: Int? = if let bIndex = breezeIndex {
+            // Look for the first match after The Breeze
+            routeStops.indices.drop(while: { $0 <= bIndex }).first {
+                routeStops[$0].shelter.localizedCaseInsensitiveContains(searchText)
+            }
+        } else {
+            // If The Breeze isn't found, don't highlight any destination
+            nil
+        }
         
         VStack {
             if source == .home {
@@ -49,7 +66,11 @@ struct ResultView: View {
                 }
                 .frame(height: 0)
                 
-                BusRoute(stops: routeStops)
+                BusRoute(
+                    stops: routeStops,
+                    breezeIndex: breezeIndex,
+                    highlightDestinationIndex: earliestDestinationIndex
+                )
             }
             .coordinateSpace(name: "scroll")
             .onPreferenceChange(ScrollOffsetKey.self) { offset in
@@ -94,6 +115,42 @@ struct ResultView: View {
         .padding(.top, 8)
 //        .navigationTitle("Bus Info")
         .navigationBarTitleDisplayMode(.inline)
+//        List {
+//            // Find The Breeze index
+//                let breezeIndex = routeStops.firstIndex {
+//                    $0.shelter.localizedCaseInsensitiveContains("The Breeze")
+//                }
+//                
+//                // Find the earliest search text match that appears after The Breeze
+//                let earliestDestinationIndex: Int? = if let bIndex = breezeIndex {
+//                    // Look for the first match after The Breeze
+//                    routeStops.indices.drop(while: { $0 <= bIndex }).first {
+//                        routeStops[$0].shelter.localizedCaseInsensitiveContains(searchText)
+//                    }
+//                } else {
+//                    // If The Breeze isn't found, don't highlight any destination
+//                    nil
+//                }
+//            
+//            
+//
+//            ForEach(routeStops.indices, id: \.self) { index in
+//                let shelter = routeStops[index]
+//
+//                let isBreeze = shelter.shelter.localizedCaseInsensitiveContains("The Breeze")
+//                let isEarliestDestination = index == earliestDestinationIndex
+//
+//                // Highlight The Breeze always, but only highlight the earliest matching destination after The Breeze
+//                        let shouldHighlight = isBreeze || isEarliestDestination
+//
+//                Text(shelter.shelter)
+//                    .foregroundColor(shouldHighlight ? .blue : .primary)
+//                    .fontWeight(shouldHighlight ? .bold : .regular)
+//            }
+//
+//        }
+
+        
     }
 }
 
@@ -112,6 +169,6 @@ private struct ScrollOffsetKey: PreferenceKey {
                 plateNumber: "B 1234 XYZ",
                 routeCode: "BC",
                 routeName: "The Breeze - AEON - ICE - The Breeze"
-            )
+            ), searchText: "Studento"
         )
 }
