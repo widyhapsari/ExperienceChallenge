@@ -17,6 +17,8 @@ struct ResultView: View {
     
     
     var body: some View {
+        let routeStops = shelterData(for: busInfo.routeCode)
+        
         VStack {
             if source == .home {
                 RightorWrong()
@@ -47,7 +49,7 @@ struct ResultView: View {
                 }
                 .frame(height: 0)
                 
-                BusRoute(stops: TheBreeze_ICE)
+                BusRoute(stops: routeStops)
             }
             .coordinateSpace(name: "scroll")
             .onPreferenceChange(ScrollOffsetKey.self) { offset in

@@ -7,6 +7,21 @@
 
 import SwiftUI
 
+func shelterData(for routeCode: String) -> [ShelterData] {
+    switch routeCode.uppercased() {
+    case "GS":
+        return GreenwichPark_Sektor13
+    case "BC":
+        return TheBreeze_ICE
+    case "ID2":
+        return Intermoda_DePark2
+    case "EC":
+        return Intermoda_CBD
+    default:
+        return [] // or return a default route if needed
+    }
+}
+
 
 struct ShelterData {
     let shelter: String
@@ -104,6 +119,44 @@ let Intermoda_DePark2: [ShelterData] = [
     .init(shelter: "CBD Barat 2", interval: 66),
     .init(shelter: "Simplicity 1", interval: 68),
     .init(shelter: "Terminal Intermoda", interval: 72)
+]
+
+let Intermoda_CBD: [ShelterData] = [
+    .init(shelter: "Terminal Intermoda", interval: 0),
+    .init(shelter: "Simplicity 2", interval: 3),
+    .init(shelter: "Halte Edutown | BSD Link", interval: 5),
+    .init(shelter: "Edutown 2", interval: 6),
+    .init(shelter: "ICE 1", interval: 8),
+    .init(shelter: "ICE 2", interval: 10),
+    .init(shelter: "ICE Business Park", interval: 11),
+    .init(shelter: "ICE 6", interval: 12),
+    .init(shelter: "ICE 5", interval: 13),
+    .init(shelter: "Froogy", interval: 15),
+    .init(shelter: "Gramedia", interval: 17),
+    .init(shelter: "Astra", interval: 18),
+    .init(shelter: "Courts Mega Store", interval: 20),
+    .init(shelter: "QBig 1", interval: 21),
+    .init(shelter: "Lulu", interval: 22),
+    .init(shelter: "QBig 2", interval: 23),
+    .init(shelter: "BCA Foresta", interval: 26),
+    .init(shelter: "FBL 2", interval: 27),
+    .init(shelter: "FBL 1", interval: 28),
+    .init(shelter: "GOP 1", interval: 36),
+    .init(shelter: "SML Plaza", interval: 38),
+    .init(shelter: "The Breeze", interval: 40),
+    .init(shelter: "Casa De Parco 2", interval: 42),
+    .init(shelter: "Digital Hub 1", interval: 43),
+    .init(shelter: "Saveria", interval: 44),
+    .init(shelter: "Casa De Parco 1", interval: 45),
+    .init(shelter: "CBD Timur 1", interval: 46),
+    .init(shelter: "CBD Selatan", interval: 47),
+    .init(shelter: "AEON Mall 1", interval: 49),
+    .init(shelter: "AEON Mall 2", interval: 51),
+    .init(shelter: "CBD Utara 3", interval: 53),
+    .init(shelter: "CBD Barat 1", interval: 54),
+    .init(shelter: "CBD Barat 2", interval: 55),
+    .init(shelter: "Simplicity 1", interval: 57),
+    .init(shelter: "Terminal Intermoda", interval: 61)
 ]
 
           
