@@ -10,7 +10,7 @@ import SwiftUI
 
 struct SearchPlateManually: View {
     @State var searchPlate = ""
-    @State private var selectedPlateNumber: BusInfo? = nil
+    //@State private var selectedPlateNumber: BusInfo? = nil
     @Binding var selectedPlate: BusInfo?
     var dismiss: () -> Void
     let columns = [GridItem(.adaptive(minimum: 100))]
@@ -61,7 +61,7 @@ struct SearchPlateManually: View {
 }
 
 #Preview {
-//    PreviewWrapper()
+    PreviewWrapper()
 }
 
 private struct PreviewWrapper: View {

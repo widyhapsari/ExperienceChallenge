@@ -63,6 +63,49 @@ let GreenwichPark_Sektor13: [ShelterData] = [
     .init(shelter: "Sektor 1.3", interval: 60)
 ]
 
+let Intermoda_DePark2: [ShelterData] = [
+    .init(shelter: "Terminal Intermoda", interval: 0),
+    .init(shelter: "Icon Centro", interval: 3),
+    .init(shelter: "Horizon Broadway", interval: 5),
+    .init(shelter: "Extreme Park", interval: 7),
+    .init(shelter: "Saveria", interval: 8),
+    .init(shelter: "Casa De Parco 1", interval: 9),
+    .init(shelter: "SML Plaza", interval: 12),
+    .init(shelter: "The Breeze", interval: 14),
+    .init(shelter: "CBD Timur 1", interval: 17),
+    .init(shelter: "AEON Mall 1", interval: 20),
+    .init(shelter: "AEON Mall 2", interval: 22),
+    .init(shelter: "GOP 2", interval: 25),
+    .init(shelter: "Simpang Foresta", interval: 27),
+    .init(shelter: "Allevare", interval: 28),
+    .init(shelter: "Flore", interval: 29),
+    .init(shelter: "Studento 1", interval: 31),
+    .init(shelter: "Naturale", interval: 32),
+    .init(shelter: "Fresco", interval: 34),
+    .init(shelter: "Primavera", interval: 36),
+    .init(shelter: "Foresta 2", interval: 37),
+    .init(shelter: "De Park 1", interval: 39),
+    .init(shelter: "De Frangipangi", interval: 42),
+    .init(shelter: "De Heliconia 1", interval: 43),
+    .init(shelter: "De Brassia", interval: 44),
+    .init(shelter: "Jadeite 1", interval: 46),
+    .init(shelter: "Greenwich Park 2", interval: 48),
+    .init(shelter: "Qbig 2", interval: 49),
+    .init(shelter: "Qbig 3", interval: 50),
+    .init(shelter: "BCA Foresta", interval: 52),
+    .init(shelter: "FBL 2", interval: 53),
+    .init(shelter: "FBL 1", interval: 54),
+    .init(shelter: "ICE 1", interval: 57),
+    .init(shelter: "ICE 2", interval: 58),
+    .init(shelter: "ICE Business Park", interval: 60),
+    .init(shelter: "ICE 6", interval: 61),
+    .init(shelter: "ICE 5", interval: 62),
+    .init(shelter: "CBD Barat 1", interval: 65),
+    .init(shelter: "CBD Barat 2", interval: 66),
+    .init(shelter: "Simplicity 1", interval: 68),
+    .init(shelter: "Terminal Intermoda", interval: 72)
+]
+
           
           
 struct BusRoute: View {

@@ -24,7 +24,7 @@ struct ResultView: View {
             }
             
             // Plate number
-            Text("B 7866 PAA")
+            Text(busInfo.plateNumber)
                 .scaledFont(size: 14)
                 .fontWeight(.semibold)
                 .foregroundColor(Color.ecPurple)
@@ -34,9 +34,10 @@ struct ResultView: View {
                     .stroke(Color.ecPurple, lineWidth: 1))
             
             // Jurusan bus
-            Text("The Breeze - AEON - ICE - The Breeze")
+            Text(busInfo.routeName)
                 .font(.title3)
                 .fontWeight(.medium)
+                .multilineTextAlignment(.center)
             
             // Bus route ScrollView
             ScrollView {
@@ -108,7 +109,7 @@ private struct ScrollOffsetKey: PreferenceKey {
             busInfo: BusInfo(
                 plateNumber: "B 1234 XYZ",
                 routeCode: "BC",
-                routeName: "The Breeze - AEON - ICE - The Breeze Loop Line"
+                routeName: "The Breeze - AEON - ICE - The Breeze"
             )
         )
 }
