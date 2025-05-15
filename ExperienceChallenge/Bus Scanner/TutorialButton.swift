@@ -22,7 +22,7 @@ struct TutorialButton: View {
                     .foregroundStyle(.white)
                     .background(Circle().fill(Color.black))
             }
-            .padding(.leading, 156)
+            .padding(.leading, 240)
             //.background(Color.red)
         }
             .fullScreenCover(isPresented: $showTutorial) {

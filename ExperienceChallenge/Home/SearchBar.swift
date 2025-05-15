@@ -157,9 +157,11 @@ struct SearchBar: View {
             .frame(maxHeight: .infinity, alignment: .top)
             
             // NavigationLink
-            .navigationDestination(isPresented: $isNavigating) {
+            .sheet(isPresented: $isNavigating) {
                 if let stop = selectedStop {
                     CameraView(source: .home, stop: stop)
+                        .presentationDetents([.medium, .large])
+                        .presentationDragIndicator(.visible)
                 }
             }
 

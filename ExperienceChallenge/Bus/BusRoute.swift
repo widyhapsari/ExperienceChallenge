@@ -7,201 +7,92 @@
 
 import SwiftUI
 
+
+struct ShelterData {
+    let shelter: String
+    let interval: Int
+}
+
+let TheBreeze_ICE: [ShelterData] = [
+    .init(shelter: "The Breeze", interval: 0),
+    .init(shelter: "CBD Timur 1", interval: 3),
+    .init(shelter: "Lobby AEON Mall", interval: 8),
+    .init(shelter: "AEON Mall 2", interval:11),
+    .init(shelter: "CBD Utara 3", interval:13),
+    .init(shelter: "ICE 1", interval:16),
+    .init(shelter: "ICE 2", interval:18),
+    .init(shelter: "ICE Business Park", interval:20),
+    .init(shelter: "ICE 6", interval:21),
+    .init(shelter: "ICE 5", interval:22),
+    .init(shelter: "CBD Barat 1", interval:25),
+    .init(shelter: "CBD Barat 2", interval:26),
+    .init(shelter: "Lobby AEON Mall", interval:29),
+    .init(shelter: "AEON Mall 2", interval:32),
+    .init(shelter: "GOP 2", interval:35),
+    .init(shelter: "Nava Park 1", interval:37),
+    .init(shelter: "Green Cove", interval:39)
+]
+
+let GreenwichPark_Sektor13: [ShelterData] = [
+    .init(shelter: "Greenwich Park Office", interval: 0),
+    .init(shelter: "Jadeite 2", interval: 4),
+    .init(shelter: "De Maja", interval: 7),
+    .init(shelter: "De Heliconia 2", interval: 8),
+    .init(shelter: "De Nara", interval: 9),
+    .init(shelter: "De Park 2", interval: 12),
+    .init(shelter: "Giardina", interval: 16),
+    .init(shelter: "Collinare", interval: 18),
+    .init(shelter: "Foglio", interval: 20),
+    .init(shelter: "Studento 2", interval: 21),
+    .init(shelter: "Albera", interval: 23),
+    .init(shelter: "Foresta 1", interval: 24),
+    .init(shelter: "GOP 1", interval: 27),
+    .init(shelter: "SML Plaza", interval: 30),
+    .init(shelter: "The Breeze", interval: 32),
+    .init(shelter: "CBD Timur 1", interval: 35),
+    .init(shelter: "GOP 2", interval: 36),
+    .init(shelter: "Nava Park 1", interval: 38),
+    .init(shelter: "SWA 2", interval: 41),
+    .init(shelter: "BSD City 1", interval: 43),
+    .init(shelter: "Eka Hospital 1", interval: 45),
+    .init(shelter: "Puspita Loka", interval: 48),
+    .init(shelter: "Polsek Serpong", interval: 51),
+    .init(shelter: "Ruko Madrid", interval: 53),
+    .init(shelter: "Pasar Modern Timur", interval: 55),
+    .init(shelter: "Griyaloka 1", interval: 57),
+    .init(shelter: "Sektor 1.3", interval: 60)
+]
+
+          
+          
 struct BusRoute: View {
+    let timeHour = 11
+    let timeMinute = 0
+    let stops: [ShelterData]
+
     var body: some View {
         VStack(spacing: -20) {
-            BusShelter(
-                shelter: "The Breeze",
-                timeHour: 11,
-                timeMinute: 00,
-                interval: 0,
-                isFirst: true,
-                isLast: false,
-                circleSize: 3,
-                whiteCircleOpacity: 1
-            )
-            
-            BusShelter(
-                shelter: "CBD Timur 1",
-                timeHour: 11,
-                timeMinute: 00,
-                interval: 3,
-                isFirst: false,
-                isLast: false,
-                circleSize: 4,
-                whiteCircleOpacity: 0.6
-            )
-            
-            BusShelter(
-                shelter: "Lobby AEON Mall",
-                timeHour: 11,
-                timeMinute: 00,
-                interval: 8,
-                isFirst: false,
-                isLast: false,
-                circleSize: 4,
-                whiteCircleOpacity: 0.6
-            )
-            
-            BusShelter(
-                shelter: "AEON Mall 2",
-                timeHour: 11,
-                timeMinute: 00,
-                interval: 11,
-                isFirst: false,
-                isLast: false,
-                circleSize: 4,
-                whiteCircleOpacity: 0.6
-            )
-            
-            BusShelter(
-                shelter: "CBD Utara 3",
-                timeHour: 11,
-                timeMinute: 00,
-                interval: 13,
-                isFirst: false,
-                isLast: false,
-                circleSize: 4,
-                whiteCircleOpacity: 0.6
-            )
-            
-            BusShelter(
-                shelter: "ICE 1",
-                timeHour: 11,
-                timeMinute: 00,
-                interval: 16,
-                isFirst: false,
-                isLast: false,
-                circleSize: 4,
-                whiteCircleOpacity: 0.6
-            )
-            
-            BusShelter(
-                shelter: "ICE 2",
-                timeHour: 11,
-                timeMinute: 00,
-                interval: 18,
-                isFirst: false,
-                isLast: false,
-                circleSize: 4,
-                whiteCircleOpacity: 0.6
-            )
-            
-            BusShelter(
-                shelter: "ICE Business Park",
-                timeHour: 11,
-                timeMinute: 00,
-                interval: 20,
-                isFirst: false,
-                isLast: false,
-                circleSize: 4,
-                whiteCircleOpacity: 0.6
-            )
-            
-            BusShelter(
-                shelter: "ICE 6",
-                timeHour: 11,
-                timeMinute: 00,
-                interval: 21,
-                isFirst: false,
-                isLast: false,
-                circleSize: 4,
-                whiteCircleOpacity: 0.6
-            )
-            
-            BusShelter(
-                shelter: "ICE 5",
-                timeHour: 11,
-                timeMinute: 00,
-                interval: 22,
-                isFirst: false,
-                isLast: false,
-                circleSize: 4,
-                whiteCircleOpacity: 0.6
-            )
-            
-            BusShelter(
-                shelter: "CBD Barat 1",
-                timeHour: 11,
-                timeMinute: 00,
-                interval: 25,
-                isFirst: false,
-                isLast: false,
-                circleSize: 4,
-                whiteCircleOpacity: 0.6
-            )
-            
-            BusShelter(
-                shelter: "CBD Barat 2",
-                timeHour: 11,
-                timeMinute: 00,
-                interval: 26,
-                isFirst: false,
-                isLast: false,
-                circleSize: 4,
-                whiteCircleOpacity: 0.6
-            )
-            
-            BusShelter(
-                shelter: "Lobby AEON Mall",
-                timeHour: 11,
-                timeMinute: 00,
-                interval: 29,
-                isFirst: false,
-                isLast: false,
-                circleSize: 4,
-                whiteCircleOpacity: 0.6
-            )
-            
-            BusShelter(
-                shelter: "AEON Mall 2",
-                timeHour: 11,
-                timeMinute: 00,
-                interval: 32,
-                isFirst: false,
-                isLast: false,
-                circleSize: 4,
-                whiteCircleOpacity: 0.6
-            )
-            
-            BusShelter(
-                shelter: "GOP 2",
-                timeHour: 11,
-                timeMinute: 00,
-                interval: 35,
-                isFirst: false,
-                isLast: false,
-                circleSize: 4,
-                whiteCircleOpacity: 0.6
-            )
-            
-            BusShelter(
-                shelter: "Nava Park 1",
-                timeHour: 11,
-                timeMinute: 00,
-                interval: 37,
-                isFirst: false,
-                isLast: false,
-                circleSize: 4,
-                whiteCircleOpacity: 0.6
-            )
-            
-            BusShelter(
-                shelter: "Green Cove",
-                timeHour: 11,
-                timeMinute: 00,
-                interval: 39,
-                isFirst: false,
-                isLast: true,
-                circleSize: 3,
-                whiteCircleOpacity: 1
-            )
+            ForEach(Array(stops.enumerated()), id: \.offset) { index, stop in
+                BusShelter(
+                    shelter: stop.shelter,
+                    timeHour: timeHour,
+                    timeMinute: timeMinute,
+                    interval: stop.interval,
+                    isFirst: index == 0,
+                    isLast: index == stops.count - 1,
+                    circleSize: (index == 0 || index == stops.count - 1) ? 3 : 4,
+                    whiteCircleOpacity: (index == 0 || index == stops.count - 1) ? 1 : 0.6
+                )
+            }
         }
         .padding()
     }
 }
+
+
+
 #Preview {
-    BusRoute()
+    BusRoute(stops: TheBreeze_ICE)
 }
 
 struct BusShelter: View {

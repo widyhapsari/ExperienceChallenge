@@ -46,7 +46,7 @@ struct ResultView: View {
                 }
                 .frame(height: 0)
                 
-                BusRoute()
+                BusRoute(stops: TheBreeze_ICE)
             }
             .coordinateSpace(name: "scroll")
             .onPreferenceChange(ScrollOffsetKey.self) { offset in

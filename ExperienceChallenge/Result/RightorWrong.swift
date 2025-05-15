@@ -16,7 +16,7 @@ struct RightorWrong: View {
                 .scaledToFit()
                 .frame(width: 120, height: 120)
                 .foregroundStyle(.green)
-                .background(Circle().fill(Color.white))
+                .background(Circle().fill(Color.ecLightDark))
             
             VStack {
                 HStack {
