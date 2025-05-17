@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct ContentView: View {
+    @State private var keyboardIsVisible = false
+    
     var body: some View {
         NavigationStack {
             ZStack(alignment: .bottom) {
@@ -18,8 +20,15 @@ struct ContentView: View {
                     BusScannerButton()
                         .padding(.bottom, 60)
                 }
+                .ignoresSafeArea(.keyboard)
             }
-            //.background(Color.blue)
+            // Add these modifiers to detect keyboard visibility
+            .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardWillShowNotification)) { _ in
+                keyboardIsVisible = true
+            }
+            .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardWillHideNotification)) { _ in
+                keyboardIsVisible = false
+            }
         }
     }
 }

@@ -27,5 +27,7 @@ let allBusStops: [BusStop] = [
     BusStop(name: "The Breeze")
 ]
 
+let sortedBusStop = allBusStops.sorted { $0.name < $1.name }
+
 // Optional: A default/fallback bus stop
-let defaultStop = BusStop(name: "Intermoda")
+let defaultStop = BusStop(name: "")

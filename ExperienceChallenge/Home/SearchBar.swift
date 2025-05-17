@@ -11,35 +11,46 @@ struct SearchBar: View {
     @State private var searchText = ""
     @State private var selectedStop: BusStop? = nil
     @State private var isNavigating = false
+    @AppStorage("searchHistory") private var searchHistoryData: Data = Data()
     @State private var searchHistory: [String] = []
+
 
     @FocusState private var isSearchFocused: Bool
     
-    // Load search history from UserDefaults when the view appears
-       private func loadSearchHistory() {
-           searchHistory = UserDefaults.standard.stringArray(forKey: "searchHistory") ?? []
-       }
-       
-       // Save search text to history
-       private func saveToHistory(_ text: String) {
-           if !text.isEmpty && !searchHistory.contains(text) {
-               searchHistory.insert(text, at: 0)
-               
-               // Limit history to 10 items
-               if searchHistory.count > 10 {
-                   searchHistory = Array(searchHistory.prefix(10))
-               }
-               
-               // Save to UserDefaults for persistence
-               UserDefaults.standard.set(searchHistory, forKey: "searchHistory")
-           }
-       }
+    private func loadSearchHistory() {
+        if let decoded = try? JSONDecoder().decode([String].self, from: searchHistoryData) {
+            searchHistory = decoded
+        }
+    }
+
+    private func saveSearchHistory() {
+        if let encoded = try? JSONEncoder().encode(searchHistory) {
+            searchHistoryData = encoded
+        }
+    }
+
+    private func updateSearchHistory(with term: String) {
+        let trimmed = term.trimmingCharacters(in: .whitespaces)
+        guard !trimmed.isEmpty else { return }
+
+        if let existingIndex = searchHistory.firstIndex(of: trimmed) {
+            searchHistory.remove(at: existingIndex)
+        }
+        searchHistory.insert(trimmed, at: 0)
+
+        if searchHistory.count > 10 {
+            searchHistory.removeLast()
+        }
+
+        saveSearchHistory()
+    }
+
     
     var filteredStops: [BusStop] {
         if searchText.isEmpty {
-            return allBusStops
+            return sortedBusStop
         } else {
-            return allBusStops.filter {
+            return sortedBusStop.filter {
                 $0.name.localizedCaseInsensitiveContains(searchText)
             }
         }
@@ -60,19 +71,23 @@ struct SearchBar: View {
                         ForEach(filteredStops) { stop in
                             Button(action: {
                                 searchText = stop.name
+                                updateSearchHistory(with: stop.name)
                                 selectedStop = stop
                                 isSearchFocused = false
                                 isNavigating = true
                             }) {
-                                HStack(spacing: 12) {
-                                    Image(systemName: "mappin.circle.fill")
-                                        .foregroundStyle(.secondary)
-                                        .background(Circle().fill(Color.white))
-                                    
-                                    Text(stop.name)
-                                        .foregroundColor(.primary)
+                                HStack {
+                                    HStack(spacing: 12) {
+                                        Image(systemName: "mappin.circle.fill")
+                                            .foregroundStyle(.secondary)
+                                            .background(Circle().fill(Color.white))
+                                        
+                                        Text(stop.name)
+                                            .foregroundColor(.primary)
+                                            .frame(maxWidth: .infinity, maxHeight: 60, alignment: .leading)
+                                    }
+                                    Image(systemName: "chevron.right")
                                 }
-                                .padding(.vertical, 12)
                             }
                             Divider()
                         }
@@ -85,70 +100,33 @@ struct SearchBar: View {
                             .scaledFont(size: 18, weight: .semibold)
                             .bold()
                         
-                        // Show search history
-//                        if !searchHistory.isEmpty {
-//                            VStack(alignment: .leading, spacing: 8) {
-//                                HStack {
-//                                    Text("Search History")
-//                                        .font(.headline)
-//                                }
-//                                .padding(.horizontal)
-//                                
-//                                ScrollView {
-//                                    LazyVStack(alignment: .leading) {
-//                                        ForEach(searchHistory, id: \.self) { item in
-//                                            Button(action: {
-//                                                searchText = item
-//                                                // Optionally perform search immediately
-//                                            }) {
-//                                                HStack {
-//                                                    Image(systemName: "clock.arrow.circlepath")
-//                                                        .foregroundColor(.gray)
-//                                                    
-//                                                    Text(item)
-//                                                    
-//                                                    Spacer()
-//                                                    
-//                                                    Button(action: {
-//                                                        if let index = searchHistory.firstIndex(of: item) {
-//                                                            searchHistory.remove(at: index)
-//                                                            UserDefaults.standard.set(searchHistory, forKey: "searchHistory")
-//                                                        }
-//                                                    }) {
-//                                                        Image(systemName: "xmark")
-//                                                            .foregroundColor(.gray)
-//                                                    }
-//                                                }
-//                                                .padding(.vertical, 8)
-//                                                .padding(.horizontal)
-//                                            }
-//                                            .buttonStyle(PlainButtonStyle())
-//                                            
-//                                            Divider()
-//                                                .padding(.leading)
-//                                        }
-//                                    }
-//                                }
-//                                .frame(maxHeight: 300)
-//                            }
-//                            .background(Color(.systemBackground))
-//                            .cornerRadius(12)
-//                            .shadow(radius: 2)
-//                            .padding()
-//                        }
                         
-                        VStack(alignment: .leading, spacing: 6) {
-                            HStack(spacing: 12) {
-                                Image(systemName: "clock.fill")
-                                    .foregroundStyle(.secondary)
-                                    .background(Circle().fill(Color.white))
-                                VStack(alignment: .leading, spacing: 8) {
-                                    Text("Studento")
+                        ForEach(searchHistory.compactMap { term in
+                            sortedBusStop.first(where: { $0.name == term }).map { stop in
+                                (term, stop)
+                            }
+                        }, id: \.0) { term, stop in
+                            Button(action: {
+                                selectedStop = stop
+                                searchText = term
+                                updateSearchHistory(with: term)
+                                isSearchFocused = true
+                                isNavigating = true
+                            }) {
+                                HStack {
+                                    HStack(spacing: 12) {
+                                        Image(systemName: "clock.fill")
+                                            .foregroundStyle(.secondary)
+                                            .background(Circle().fill(Color.white))
+                                        Text(term)
+                                            .foregroundStyle(.ecDarkLight)
+                                            .frame(maxWidth: .infinity, maxHeight: 40, alignment: .leading)
+                                    }
+                                    Image(systemName: "chevron.right")
                                 }
                             }
+                            Divider()
                         }
-                        .padding(.vertical, 12)
-                        Divider()
                     }
                     .padding(.horizontal, 15)
                     .padding(.vertical, 15)
@@ -162,7 +140,9 @@ struct SearchBar: View {
                     CameraView(source: .home, stop: stop)
                 }
             }
-
+            .onAppear {
+                loadSearchHistory()
+            }
             
         }
     }

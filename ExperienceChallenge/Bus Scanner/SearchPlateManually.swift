@@ -26,6 +26,7 @@ struct SearchPlateManually: View {
     }
     
     var body: some View {
+        
         VStack(spacing: 24) {
             Text("Enter Bus Plate Manually")
                 .scaledFont(size: 16, weight: .medium)
@@ -44,10 +45,10 @@ struct SearchPlateManually: View {
                     } label: {
                         Text(plate.plateNumber)
                             .scaledFont(size: 12, weight: .semibold)
-                            .foregroundColor(Color.ecBusPink)
+                            .foregroundColor(colorForRoute(plate.routeCode))
                             .frame(width: 100, height: 28)
                             .overlay(RoundedRectangle(cornerRadius: 8)
-                                .stroke(Color.ecBusPink, lineWidth: 1))
+                                .stroke(colorForRoute(plate.routeCode), lineWidth: 1))
                     }
                 }
             }

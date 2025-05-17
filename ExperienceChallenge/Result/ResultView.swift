@@ -10,15 +10,16 @@ import SwiftUI
 struct ResultView: View {
     @State private var hasScrolled = false
     @State private var isSearchBarActive: Bool = false
+    @State private var scrollOffset: CGFloat = 0
     @Environment(\.dismiss) var dismiss
     let source: CameraViewSource
     let showResultCard: Bool
     let busInfo: BusInfo
     let searchText: String
     
-    
     var body: some View {
         let routeStops = shelterData(for: busInfo.routeCode)
+        let lineColor = colorForRoute(busInfo.routeCode)
         
         // Find The Breeze index
         let breezeIndex = routeStops.firstIndex {
@@ -38,128 +39,100 @@ struct ResultView: View {
         
         VStack {
             if source == .home {
-                RightorWrong()
+                RightorWrong(isGoingToDestination: earliestDestinationIndex != nil)
                     .padding(24)
             }
             
-            // Plate number
-            Text(busInfo.plateNumber)
-                .scaledFont(size: 14)
-                .fontWeight(.semibold)
-                .foregroundColor(Color.ecPurple)
-                .padding(.horizontal, 12)
-                .padding(.vertical, 6)
-                .overlay(RoundedRectangle(cornerRadius: 8)
-                    .stroke(Color.ecPurple, lineWidth: 1))
-            
-            // Jurusan bus
-            Text(busInfo.routeName)
-                .font(.title3)
-                .fontWeight(.medium)
-                .multilineTextAlignment(.center)
-            
-            // Bus route ScrollView
-            ScrollView {
-                GeometryReader { geo in
-                    Color.clear
-                        .preference(key: ScrollOffsetKey.self, value: geo.frame(in: .named("scroll")).minY)
-                }
-                .frame(height: 0)
+            VStack(spacing: 12) {
+                // Plate number
+                Text(busInfo.plateNumber)
+                    .scaledFont(size: 14)
+                    .fontWeight(.semibold)
+                    .foregroundColor(lineColor)
+                    .padding(.horizontal, 12)
+                    .padding(.vertical, 6)
+                    .overlay(RoundedRectangle(cornerRadius: 8)
+                        .stroke(lineColor, lineWidth: 1))
                 
-                BusRoute(
-                    stops: routeStops,
-                    breezeIndex: breezeIndex,
-                    highlightDestinationIndex: earliestDestinationIndex
-                )
+                // Jurusan bus
+                Text(busInfo.routeName)
+                    .font(.title3)
+                    .fontWeight(.medium)
+                    .multilineTextAlignment(.center)
             }
-            .coordinateSpace(name: "scroll")
-            .onPreferenceChange(ScrollOffsetKey.self) { offset in
-                hasScrolled = offset < -5
-            }
-            .overlay(
+            .padding(.bottom, 24)
+            
+            // Bus route ScrollView with shadow overlay
+            ZStack(alignment: .top) {
+                ScrollView {
+                    GeometryReader { geo in
+                        Color.clear
+                            .preference(key: ScrollOffsetKey.self, value: geo.frame(in: .named("scroll")).minY)
+                            .frame(height: 0)
+                    }
+                    
+                    BusRoute(
+                        stops: routeStops,
+                        breezeIndex: breezeIndex,
+                        highlightDestinationIndex: earliestDestinationIndex,
+                        searchText: searchText, lineColor: lineColor
+                    )
+                   // .padding(.top, 10)
+                }
+                .coordinateSpace(name: "scroll")
+                .onPreferenceChange(ScrollOffsetKey.self) { offset in
+                    scrollOffset = offset
+                    hasScrolled = offset < 0
+                }
+                
                 // Top shadow overlay
                 VStack {
                     Rectangle()
                         .fill(
                             LinearGradient(
                                 gradient: Gradient(colors: [
-                                    .black.opacity(hasScrolled ? 0.8 : 0),
-                                    .black.opacity(hasScrolled ? 0.8 : 0)
+                                    .black.opacity(0.25),
+                                    .clear
                                 ]),
                                 startPoint: .top,
                                 endPoint: .bottom
                             )
                         )
-                        .frame(height: 4)
+                        .frame(height: 8)
                     Spacer()
                 }
-                .animation(.easeInOut(duration: 0.2), value: hasScrolled)
-                .allowsHitTesting(false), // Ensures the overlay doesn't interfere with scrolling
-                alignment: .top
-            )
-            .navigationBarBackButtonHidden(true)
-            .toolbar {
-                ToolbarItem(placement: .topBarLeading) {
-                    Button {
-                        dismiss()
-                    } label: {
-                        Image(systemName: "chevron.left")
-                            .foregroundColor(.blue)
-                        Text("Back")
-                            .foregroundColor(.blue)
-                            .font(.title3)
-                    }
-                }
+                .opacity(scrollOffset < -10 ? 1 : 0)
+                .animation(.easeInOut(duration: 0.2), value: scrollOffset)
+                .allowsHitTesting(false) // So it doesn't interfere with scrolling
             }
         }
         .padding(.top, 8)
-//        .navigationTitle("Bus Info")
         .navigationBarTitleDisplayMode(.inline)
-//        List {
-//            // Find The Breeze index
-//                let breezeIndex = routeStops.firstIndex {
-//                    $0.shelter.localizedCaseInsensitiveContains("The Breeze")
-//                }
-//                
-//                // Find the earliest search text match that appears after The Breeze
-//                let earliestDestinationIndex: Int? = if let bIndex = breezeIndex {
-//                    // Look for the first match after The Breeze
-//                    routeStops.indices.drop(while: { $0 <= bIndex }).first {
-//                        routeStops[$0].shelter.localizedCaseInsensitiveContains(searchText)
-//                    }
-//                } else {
-//                    // If The Breeze isn't found, don't highlight any destination
-//                    nil
-//                }
-//            
-//            
-//
-//            ForEach(routeStops.indices, id: \.self) { index in
-//                let shelter = routeStops[index]
-//
-//                let isBreeze = shelter.shelter.localizedCaseInsensitiveContains("The Breeze")
-//                let isEarliestDestination = index == earliestDestinationIndex
-//
-//                // Highlight The Breeze always, but only highlight the earliest matching destination after The Breeze
-//                        let shouldHighlight = isBreeze || isEarliestDestination
-//
-//                Text(shelter.shelter)
-//                    .foregroundColor(shouldHighlight ? .blue : .primary)
-//                    .fontWeight(shouldHighlight ? .bold : .regular)
-//            }
-//
-//        }
-
-        
+        .navigationBarBackButtonHidden(true)
+        .toolbar {
+            ToolbarItem(placement: .topBarLeading) {
+                Button {
+                    dismiss()
+                } label: {
+                    Image(systemName: "chevron.left")
+                        .foregroundColor(.blue)
+                    Text("Back")
+                        .foregroundColor(.blue)
+                        .font(.title3)
+                }
+            }
+        }
     }
 }
 
-private struct ScrollOffsetKey: PreferenceKey {
+struct ScrollOffsetKey: PreferenceKey {
     static var defaultValue: CGFloat = 0
+
     static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
         value = nextValue()
     }
 }
+
 
 #Preview {
     ResultView(

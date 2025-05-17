@@ -22,14 +22,9 @@ struct HomeView: View {
                     SearchBar()
                     
                 }
-                
-                
-                
-               
             }
             .padding(.top, 8)
         }
-    
 }
 
 #Preview {

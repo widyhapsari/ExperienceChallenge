@@ -7,27 +7,6 @@
 
 import SwiftUI
 
-func shelterData(for routeCode: String) -> [ShelterData] {
-    switch routeCode.uppercased() {
-    case "GS":
-        return GreenwichPark_Sektor13
-    case "BC":
-        return TheBreeze_ICE
-    case "ID1":
-        return Intermoda_DePark1
-    case "ID2":
-        return Intermoda_DePark2
-    case "EC":
-        return Intermoda_CBD
-    case "IS":
-        return Intermoda_Sektor13
-    case "IV":
-        return Intermoda_VanyaPark
-    default:
-        return [] // or return a default route if needed
-    }
-}
-
 
 struct ShelterData {
     let shelter: String
@@ -268,14 +247,21 @@ struct BusRoute: View {
     let stops: [ShelterData]
     let breezeIndex: Int?
     let highlightDestinationIndex: Int?
+    let searchText: String
+    let lineColor: Color
 
     var body: some View {
         VStack(spacing: -20) {
             ForEach(Array(stops.enumerated()), id: \.offset) { index, stop in
-                // Determine if this stop should be highlighted
-                let isBreeze = index == breezeIndex
-                let isHighlightedDestination = index == highlightDestinationIndex
-                let shouldHighlight = isBreeze || isHighlightedDestination
+                let shouldHighlight: Bool = {
+                    if let breezeIndex = breezeIndex,
+                       let highlightDestinationIndex = highlightDestinationIndex,
+                       !searchText.isEmpty {
+                        return (index == breezeIndex && breezeIndex < highlightDestinationIndex) || (index == highlightDestinationIndex)
+                    } else {
+                        return false
+                    }
+                }()
 
                 BusShelter(
                     shelter: stop.shelter,
@@ -286,7 +272,8 @@ struct BusRoute: View {
                     isLast: index == stops.count - 1,
                     circleSize: (index == 0 || index == stops.count - 1) ? 3 : 4,
                     whiteCircleOpacity: (index == 0 || index == stops.count - 1) ? 1 : 0.6,
-                    isHighlighted: shouldHighlight
+                    isHighlighted: shouldHighlight,
+                    lineColor: lineColor
                 )
             }
         }
@@ -300,7 +287,8 @@ struct BusRoute: View {
     BusRoute(
         stops: TheBreeze_ICE,
         breezeIndex: TheBreeze_ICE.firstIndex { $0.shelter.contains("The Breeze") },
-        highlightDestinationIndex: 5  // Example index for preview
+        highlightDestinationIndex: 5,  // Example index for preview
+        searchText: "", lineColor: .ecPurple
     )
 }
 
@@ -314,6 +302,7 @@ struct BusShelter: View {
     var circleSize: Int
     var whiteCircleOpacity: Double
     var isHighlighted: Bool = false
+    var lineColor: Color = .ecPurple
 
     private var totalMinutes: Int {
         timeMinute + interval
@@ -329,21 +318,21 @@ struct BusShelter: View {
         HStack {
             ZStack {
                 Rectangle()
-                    .fill(Color.ecPurple)
+                    .fill(lineColor)
                     .frame(width: 14)
                     .padding(.top, isFirst ? 40 : 0)
                     .padding(.bottom, isLast ? 40 : 0)
 
                 Circle()
-                    .strokeBorder(Color.ecPurple, lineWidth: CGFloat(circleSize))
-                    .background(Circle().fill(Color.white.opacity(whiteCircleOpacity)))
-                    .frame(width: 14, height: 14)
+                    .strokeBorder(lineColor, lineWidth: CGFloat(isHighlighted ? 5 : circleSize))
+                    .background(Circle().fill(Color.white.opacity(isHighlighted ? 1 : whiteCircleOpacity)))
+                    .frame(width: isHighlighted ? 18 : 14, height: isHighlighted ? 18 : 14)
             }
             .frame(width: 20, height: 80)
             
             Text(shelter)
                 .font(.callout)
-                .foregroundColor(isHighlighted ? .blue : .primary)
+                .foregroundColor(isHighlighted ? lineColor : .primary)
                 .fontWeight(isHighlighted ? .bold : .regular)
 
             Spacer()
