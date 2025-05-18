@@ -48,7 +48,33 @@ struct CameraView: View {
                         detectedPlateText: $detectedPlateText,
                         scanFrameRect: $scanFrameRect,
                         manualCapture: false)
-                .edgesIgnoringSafeArea(.all)
+                
+                Color.black.opacity(0.8)
+                    .mask(
+                        Rectangle()
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 8)
+                                    .frame(width: 300, height:180)
+                                    .blendMode(.destinationOut)
+                                    .padding(.bottom, 56)
+                            )
+                    )
+                    .compositingGroup()
+                
+                RoundedRectangle(cornerRadius: 8)
+                    .stroke(Color.ecOrange, lineWidth: 3)
+                    .frame(width: 300, height: 180)
+                    .padding(.bottom, 56)
+                    .foregroundColor(isPlateDetected ? .green : .white)
+                    .background(Color.clear)
+                    .overlay(
+                        GeometryReader { geometry in
+                            Color.clear
+                                .onAppear {
+                                    scanFrameRect = geometry.frame(in: .global)
+                                }
+                        }
+                    )
 
                 VStack {
                     // Search bar
@@ -69,19 +95,6 @@ struct CameraView: View {
                     VStack(spacing: 104) {
                         VStack(spacing: 20) {
                             ZStack {
-                                RoundedRectangle(cornerRadius: 8)
-                                    .stroke(Color.ecOrange, lineWidth: 3)
-                                    .frame(width: 300, height: 180)
-                                    .foregroundColor(isPlateDetected ? .green : .white)
-                                    .background(Color.clear)
-                                    .overlay(
-                                        GeometryReader { geometry in
-                                            Color.clear
-                                                .onAppear {
-                                                    scanFrameRect = geometry.frame(in: .global)
-                                                }
-                                        }
-                                    )
 
                                 if isPlateDetected {
                                     Text(detectedPlateText)
@@ -93,7 +106,7 @@ struct CameraView: View {
                                         .position(x: 125, y: 130)
                                 }
                             }
-                            .frame(width: 250, height: 150)
+                            //.frame(width: 250, height: 150)
 
                             Text("Place the bus plate number\ninside the box and snap")
                                 .font(.system(size: 15, weight: .medium))
@@ -124,13 +137,16 @@ struct CameraView: View {
                             .scaledFont(size: 16, weight: .regular)
                             .foregroundColor(.ecOrange)
                             .frame(width: 280, height: 40)
-                            .background(Color(.secondarySystemBackground))
+                            .background(Color(.ecSecondary))
                             .cornerRadius(12)
                         }
+                        
                         .padding(.bottom, 100)
                     }
                 }
             }
+            
+    .edgesIgnoringSafeArea(.all)
             .onAppear {
                 searchText = stop.name
             }
@@ -147,10 +163,11 @@ struct CameraView: View {
                                 .foregroundColor(.white)
                                 .font(.title3)
                         }
-                        TutorialButton()
+                        //TutorialButton()
                     }
                 }
             }
+            
             // Invisible navigation trigger
             if let plate = selectedPlate {
                 NavigationLink(value: plate) {
@@ -158,6 +175,7 @@ struct CameraView: View {
                 }
             }
         }
+        
         .sheet(isPresented: $showSearch) {
             NavigationStack {
                 SearchPlateManually(
@@ -167,6 +185,7 @@ struct CameraView: View {
             }
             .presentationDetents([.medium])
             .presentationDragIndicator(.visible)
+            .background(Color.white)
         }
         .navigationDestination(item: $selectedPlate) { plate in
             ResultView(

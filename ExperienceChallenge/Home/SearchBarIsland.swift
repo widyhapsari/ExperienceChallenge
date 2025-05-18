@@ -47,11 +47,13 @@ struct SearchBarIsland: View {
             
             VStack(alignment: .leading, spacing: 14) {
                 Text("The Breeze")
+                    .foregroundColor(searchColor)
                 
                 Divider()
                 
                 VStack(alignment: .leading) {
                     TextField("Your destination", text: $searchText)
+                        .foregroundColor(searchColor)
                         .focused($isFocused)
                         .disabled(mode == .changeDestination) // Make non-editable in CameraView
                         .contentShape(Rectangle()) // Ensure the full area is tappable
@@ -65,19 +67,28 @@ struct SearchBarIsland: View {
         }
         
         .padding(12)
-        .background(backgroundColor)
+        .background(searchBarColor)
         .cornerRadius(18)
         .shadow(color: Color.black.opacity(0.08), radius: 1, x: 2, y: 2)
         .padding(.horizontal)
         .padding(.top, 16)
     }
-        
-    private var backgroundColor: Color {
-            switch mode {
-            case .search:
-                return Color(.secondarySystemBackground)
-            case .changeDestination:
-                return Color(.ecDarkSearchBar) // Or any other color
-            }
+    
+    private var searchBarColor: Color {
+        switch mode {
+        case .search:
+            return .ecDarkSearchBar
+        case .changeDestination:
+            return Color(.ecCameraSearchBar) // Or any other color
         }
+    }
+        
+    private var searchColor: Color {
+        switch mode {
+        case .search:
+            return .primary
+        case .changeDestination:
+            return Color(.black) // Or any other color
+        }
+    }
 }

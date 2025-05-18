@@ -26,7 +26,7 @@ struct TutorialButton: View {
             //.background(Color.red)
         }
             .fullScreenCover(isPresented: $showTutorial) {
-                TutorialView()
+                TutorialView(onFinish: {})
             }
     }
 }

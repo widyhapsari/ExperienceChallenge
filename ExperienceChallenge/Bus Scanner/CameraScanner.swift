@@ -161,7 +161,7 @@ struct CameraScanner: UIViewRepresentable {
             let normalizedRect = convertToNormalizedRect(scanFrameRect, pixelBuffer: pixelBuffer)
             
             // Safely expand region without going out of bounds
-                let padding: CGFloat = 0.02
+                let padding: CGFloat = 0.05
             
                 let x = max(0, normalizedRect.origin.x - padding)
                 let y = max(0, normalizedRect.origin.y - padding)

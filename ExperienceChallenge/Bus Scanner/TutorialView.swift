@@ -7,8 +7,11 @@
 
 import SwiftUI
 
+
+
 struct TutorialView: View {
     @Environment(\.dismiss) var dismiss
+    let onFinish: () -> Void
     
     var body: some View {
         VStack(alignment: .center, spacing: 45) {
@@ -16,12 +19,10 @@ struct TutorialView: View {
                 Text("How to Scan")
                     .scaledFont(size: 18, weight: .semibold)
                     .multilineTextAlignment(.center)
-                    .foregroundColor(.black)
                 
                 Text("BSD Link Plate Number")
                     .scaledFont(size: 18, weight: .semibold)
                     .multilineTextAlignment(.center)
-                    .foregroundColor(.black)
             }
             
             //tutorial cards
@@ -32,7 +33,7 @@ struct TutorialView: View {
             }
             
             Button("Continue") {
-                dismiss()}
+                onFinish()}
                     .scaledFont(size: 16, weight: .semibold)
                     .frame(width: 108, height: 36, alignment: .center)
                     .background(Color(.ecOrange))
@@ -44,7 +45,7 @@ struct TutorialView: View {
         .padding(.horizontal, 10)
         .padding(.vertical, 135)
         .frame(width: 393, height: 852, alignment: .top)
-        .background(Color(red: 0.96, green: 0.96, blue: 0.96))
+        .background(.ecSecondaryLightDark)
         
         Spacer(minLength: 10)
             
@@ -52,7 +53,7 @@ struct TutorialView: View {
 }
 
 #Preview {
-    TutorialView()
+    TutorialView (onFinish: {})
 }
 
 struct TutorialViewCard: View {
@@ -80,7 +81,7 @@ struct TutorialViewCard: View {
         }
         .padding(.vertical, 20)
         .padding(.horizontal, 30)
-        .background(.white)
+        .background(.ecLightDark)
         .cornerRadius(15)
     }
 }
