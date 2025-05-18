@@ -100,7 +100,10 @@ struct SearchBar: View {
                             .scaledFont(size: 18, weight: .semibold)
                             .bold()
                         
-                        
+                        if searchHistory.isEmpty {
+                            Color.clear.frame(height: 40) // keeps layout height consistent
+                        }
+
                         ForEach(searchHistory.compactMap { term in
                             sortedBusStop.first(where: { $0.name == term }).map { stop in
                                 (term, stop)
