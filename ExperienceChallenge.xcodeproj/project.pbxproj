@@ -10,9 +10,22 @@
 		178FFCDA2DCB585F00795987 /* ExperienceChallenge.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ExperienceChallenge.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		178E70972DDAB7DA0055217E /* Exceptions for "ExperienceChallenge" folder in "ExperienceChallenge" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 178FFCD92DCB585F00795987 /* ExperienceChallenge */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		178FFCDC2DCB585F00795987 /* ExperienceChallenge */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				178E70972DDAB7DA0055217E /* Exceptions for "ExperienceChallenge" folder in "ExperienceChallenge" target */,
+			);
 			path = ExperienceChallenge;
 			sourceTree = "<group>";
 		};
@@ -255,6 +268,8 @@
 				DEVELOPMENT_TEAM = 2K93VBS9VB;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ExperienceChallenge/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = BLink;
 				INFOPLIST_KEY_NSCameraUsageDescription = "\"This app requires camera access to scan license plates.\"";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -285,6 +300,8 @@
 				DEVELOPMENT_TEAM = 2K93VBS9VB;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ExperienceChallenge/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = BLink;
 				INFOPLIST_KEY_NSCameraUsageDescription = "\"This app requires camera access to scan license plates.\"";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;

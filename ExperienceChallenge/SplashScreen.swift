@@ -20,11 +20,12 @@ struct SplashScreen: View {
             if hasLaunchedBefore {
                 // Not first launch, go directly to HomeView
                 ContentView()
-            } else {
+            }
+            else {
                 // First launch, show tutorial
                 TutorialView(onFinish: {
-                    UserDefaults.standard.set(true, forKey: "hasLaunchedBefore")
-                    hasLaunchedBefore = true
+                    UserDefaults.standard.set(false, forKey: "hasLaunchedBefore")
+                    hasLaunchedBefore = false
                 })
             }
         } else {

@@ -161,21 +161,21 @@ struct CameraScanner: UIViewRepresentable {
             let normalizedRect = convertToNormalizedRect(scanFrameRect, pixelBuffer: pixelBuffer)
             
             // Safely expand region without going out of bounds
-                let padding: CGFloat = 0.05
-            
-                let x = max(0, normalizedRect.origin.x - padding)
-                let y = max(0, normalizedRect.origin.y - padding)
-                var width = normalizedRect.width + (padding * 2)
-                var height = normalizedRect.height + (padding * 2)
-            
-                if x + width > 1.0 {
-                    width = 1.0 - x
-                }
-                if y + height > 1.0 {
-                    height = 1.0 - y
-                }
+//                let padding: CGFloat = 0.05
+//            
+//                let x = max(0, normalizedRect.origin.x - padding)
+//                let y = max(0, normalizedRect.origin.y - padding)
+//                var width = normalizedRect.width + (padding * 2)
+//                var height = normalizedRect.height + (padding * 2)
+//            
+//                if x + width > 1.0 {
+//                    width = 1.0 - x
+//                }
+//                if y + height > 1.0 {
+//                    height = 1.0 - y
+//                }
 
-                let expandedRect = CGRect(x: x, y: y, width: width, height: height)
+//                let expandedRect = CGRect(x: x, y: y, width: width, height: height)
 
                 // Create the text recognition request
                 let request = VNRecognizeTextRequest { [weak self] request, error in
@@ -330,7 +330,7 @@ struct CameraScanner: UIViewRepresentable {
             request.recognitionLevel = .accurate
             request.usesLanguageCorrection = false
             request.revision = 3
-            request.regionOfInterest = expandedRect
+//            request.regionOfInterest = expandedRect
             
             
             
