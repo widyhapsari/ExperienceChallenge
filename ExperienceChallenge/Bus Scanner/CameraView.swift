@@ -36,6 +36,8 @@ struct CameraView: View {
     @Environment(\.dismiss) var dismiss
     @State private var showSearch = false
     @State private var selectedPlate: BusInfo? = nil
+    @State private var navigationTarget: BusInfo? = nil
+
     
     
     var body: some View {
@@ -210,6 +212,11 @@ struct CameraView: View {
             recognizedPlate = detectedPlateText
             showScanResult = true
             isProcessing = false
+            
+            if let matchedBus = allBusInfo.first(where: { $0.plateNumber == detectedPlateText }) {
+                    selectedPlate = matchedBus
+                }
+            
         } else if let pixelBuffer = capturedImage {
             // Otherwise try to analyze the current frame
             analyzeImage(pixelBuffer)
@@ -271,6 +278,10 @@ struct CameraView: View {
                             self.recognizedPlate = plateNumber
                             self.showScanResult = true
                             self.isProcessing = false
+                            
+                            if let matchedBus = allBusInfo.first(where: { $0.plateNumber == plateNumber }) {
+                                self.selectedPlate = matchedBus  // 👈 This triggers navigation
+                            }
                         }
                         plateFound = true
                         return

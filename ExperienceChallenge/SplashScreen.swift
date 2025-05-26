@@ -24,8 +24,8 @@ struct SplashScreen: View {
             else {
                 // First launch, show tutorial
                 TutorialView(onFinish: {
-                    UserDefaults.standard.set(false, forKey: "hasLaunchedBefore")
-                    hasLaunchedBefore = false
+                    UserDefaults.standard.set(true, forKey: "hasLaunchedBefore")
+                    hasLaunchedBefore = true
                 })
             }
         } else {
